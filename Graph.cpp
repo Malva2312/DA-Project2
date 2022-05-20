@@ -2,13 +2,12 @@
 // Created by Utilizador on 12/05/2022.
 //
 
-#include <cmath>
+#include <queue>
 #include "Graph.h"
 
 
 template<class T>
-Graph<T>::Graph(bool isDir) {
-    this->dir = isDir;
+Graph<T>::Graph() {
     this->allNodes = {};
 }
 
@@ -83,5 +82,39 @@ unsigned int Graph<T>::findNodeIndex(T value) {
         if (allNodes.at(idx).value == value) return idx;
     }
     return INT_MAX;
+}
+
+template<class T>
+void Graph<T>::addEdge(unsigned int idStart, unsigned int idEnd, int weight) {
+    Edge<T> newEdge;
+
+    newEdge.weight = weight;
+    newEdge.next = &(allNodes.at(idEnd));
+    newEdge.used = false;
+
+    allNodes.at(idStart).adj.push_back(newEdge);
+}
+
+template<class T>
+bool Graph<T>::eraseEdge(unsigned int start, unsigned int end, int weight) {
+    for (int i = 0; i < allNodes.size(); i++)
+    {
+        if(allNodes.at(i).weight == weight){
+            erase(allNodes.at(i).begin + i);
+            return true;
+        }
+    }
+    return false;
+}
+
+template<class T>
+std::vector<unsigned int> Graph<T>::BFS(unsigned int idxStartNode) {
+    setAllNotVisited();
+
+    std::queue<unsigned int> nodesIdQueue;
+    std::vector<unsigned int> idPath = {idxStartNode};
+
+    allNodes.at(idxStartNode).visited = true;
+    add
 }
 
