@@ -6,21 +6,20 @@
 #include "Graph.h"
 
 
-template<class T>
-Graph<T>::Graph() {
+
+Graph::Graph() {
     this->allNodes = {};
 }
 
-template<class T>
-bool Graph<T>::operator==(Graph<T> A) {
+
+bool Graph::operator==(Graph A) {
     return this->allNodes == A.allNodes;
 }
 
-template<class T>
-unsigned int Graph<T>::addNode(T value) {
-    Node<T> newNode;
 
-    newNode.value = value;
+unsigned int Graph::addNode(int id) {
+    Node newNode;
+
     newNode.visited = false;
     newNode.adj = {};
     newNode.id = idCounter++;
@@ -29,8 +28,8 @@ unsigned int Graph<T>::addNode(T value) {
     return newNode.id;
 }
 
-template<class T>
-bool Graph<T>::removeNode(unsigned int idNode) {
+
+bool Graph::removeNode(unsigned int idNode) {
     int high = allNodes.size() -1;
     unsigned int low = 0;
 
@@ -49,44 +48,44 @@ bool Graph<T>::removeNode(unsigned int idNode) {
     return false;
 }
 
-template<class T>
-void Graph<T>::setAllNotVisited() {
-    for (Node<T> node : allNodes){
+
+void Graph::setAllNotVisited() {
+    for (Node node : allNodes){
         node.visited = false;
     }
     return;
 }
 
-template<class T>
-std::vector<Node<T>> Graph<T>::getAllNodes() const {
+
+std::vector<Node> Graph::getAllNodes() const {
     return allNodes;
 }
 
-template<class T>
-std::vector<Node<T>> Graph<T>::getAllNodesPtr() const {
-    std::vector<Node<T>> allNodesPtr;
-    for (Node<T> node : allNodes){
-        allNodesPtr.push_back(&node);
+
+std::vector<Node> Graph::getAllNodesPtr() const {
+    std::vector<Node> allNodesPtr;
+    for (Node node : allNodes){
+        allNodesPtr.push_back(node);
     }
     return allNodesPtr;
 }
 
-template<class T>
-unsigned int Graph<T>::size() {
+
+unsigned int Graph::size() {
     return allNodes.size();
 }
 
-template<class T>
-unsigned int Graph<T>::findNodeIndex(T value) {
+
+unsigned int Graph::findNodeIndex(int id) {
     for (unsigned int idx; idx < allNodes.size(); ++idx){
-        if (allNodes.at(idx).value == value) return idx;
+        if (allNodes.at(idx).id == id) return idx;
     }
     return INT_MAX;
 }
 
-template<class T>
-void Graph<T>::addEdge(unsigned int idStart, unsigned int idEnd, int weight) {
-    Edge<T> newEdge;
+
+void Graph::addEdge(unsigned int idStart, unsigned int idEnd, int weight) {
+    Edge newEdge;
 
     newEdge.weight = weight;
     newEdge.next = &(allNodes.at(idEnd));
@@ -95,26 +94,15 @@ void Graph<T>::addEdge(unsigned int idStart, unsigned int idEnd, int weight) {
     allNodes.at(idStart).adj.push_back(newEdge);
 }
 
-template<class T>
-bool Graph<T>::eraseEdge(unsigned int start, unsigned int end, int weight) {
-    for (int i = 0; i < allNodes.size(); i++)
-    {
-        if(allNodes.at(i).weight == weight){
-            erase(allNodes.at(i).begin + i);
-            return true;
-        }
-    }
-    return false;
-}
 
-template<class T>
-std::vector<unsigned int> Graph<T>::BFS(unsigned int idxStartNode) {
+
+std::vector<unsigned int> Graph::BFS(unsigned int idxStartNode) {
     setAllNotVisited();
 
     std::queue<unsigned int> nodesIdQueue;
     std::vector<unsigned int> idPath = {idxStartNode};
 
     allNodes.at(idxStartNode).visited = true;
-    add
+    fadd;
 }
 

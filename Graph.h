@@ -8,44 +8,44 @@
 #include <vector>
 #include <cmath>
 #include <algorithm>
+#include <climits>
+struct Edge;
+struct Node;
+class Graph;
 
-template <class T> struct Edge;
-template <class T> struct Node;
-template <class T> class Graph;
-
-template <class T>
 struct Node{
-    std::vector<T> adj;
+    std::vector<Edge> adj;
     unsigned int id;
     bool visited;
-    T value;
 };
 
-template <class T>
 struct Edge{
     unsigned int weight;
-    Node<T> * next;
+    Node * next;
     bool used;
 };
 
-template <class T>
+
+
+
+
 class Graph {
+
 private:
-    std::vector<Node<T>> allNodes;
+    std::vector<Node> allNodes;
     unsigned int idCounter = 0;
     //bool dir;
 public:
     Graph(); // se o graph é dirigido
-    bool operator== (Graph<T> A);
-    unsigned int addNode(T value); //adicionar um node com um valor
+    bool operator== (Graph A);
+    unsigned int addNode(int id); //adicionar um node com um valor
     bool removeNode(unsigned int value); //remover um node pelo seu index
     void setAllNotVisited(); //todos os nodes não visitados
-    std::vector<Node<T>> getAllNodes() const; //recebe o vetor dos nodes
-    std::vector<Node<T>> getAllNodesPtr() const; //recebe um vetor com Ptr dos nodes
+    std::vector<Node> getAllNodes() const; //recebe o vetor dos nodes
+    std::vector<Node> getAllNodesPtr() const; //recebe um vetor com Ptr dos nodes
     unsigned int size(); //numero de nodes
-    unsigned int findNodeIndex(T value); //recebe um valor de um nó, retorna a sua posição
-    void addEdge(unsigned int idStart, unsigned int idEnd, int weight); //adiciona edge de start -> end se for dir// se !dir adiciona start<->end
-    bool eraseEdge(unsigned int start, unsigned int end, int weight);//elimina edge de start -> end se for dir// se !dir elimina start<->end
+    unsigned int findNodeIndex(int id); //recebe um valor de um nó, retorna a sua posição
+    void addEdge(unsigned int idStart,unsigned int idEnd, int weight); //adiciona edge de start -> end se for dir// se !dir adiciona start<->end
     std::vector<unsigned int> BFS(unsigned int idxStartNode);//vetor com os idx ordenados pela ordem que são encontrados na BFS
 
 };
