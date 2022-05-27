@@ -44,6 +44,7 @@ public:
     std::vector<Node<T>> getAllNodesPtr() const; //recebe um vetor com Ptr dos nodes
     unsigned int size(); //numero de nodes
     unsigned int findNodeIndex(T value); //recebe um valor de um nó, retorna a sua posição
+    unsigned int findNodeIndex(unsigned int idNode);
     void addEdge(unsigned int idStart, unsigned int idEnd, int weight); //adiciona edge de start -> end se for dir// se !dir adiciona start<->end
     bool eraseEdge(unsigned int start, unsigned int end, int weight);//elimina edge de start -> end se for dir// se !dir elimina start<->end
     std::vector<unsigned int> BFS(unsigned int idxStartNode);//vetor com os idx ordenados pela ordem que são encontrados na BFS

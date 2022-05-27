@@ -31,22 +31,8 @@ unsigned int Graph<T>::addNode(T value) {
 
 template<class T>
 bool Graph<T>::removeNode(unsigned int idNode) {
-    int high = allNodes.size() -1;
-    unsigned int low = 0;
-
-    while (low <= high) {
-        unsigned int mid = low + (high - low) / 2;
-
-        if (allNodes.at(mid).id == idNode) {
-            allNodes.erase(allNodes.begin() + mid);
-            return true;
-        }
-        else if (allNodes.at(mid).id < idNode)
-            low = mid + 1;
-        else if (idNode < allNodes.at(mid).id)
-            high = mid - 1;
-    }
-    return false;
+    int pos = findNodeIndex(idNode);
+    allNodes.erase(allNodes.begin() + pos);
 }
 
 template<class T>
@@ -54,7 +40,6 @@ void Graph<T>::setAllNotVisited() {
     for (Node<T> node : allNodes){
         node.visited = false;
     }
-    return;
 }
 
 template<class T>
@@ -85,6 +70,25 @@ unsigned int Graph<T>::findNodeIndex(T value) {
 }
 
 template<class T>
+unsigned int Graph<T>::findNodeIndex(unsigned int idNode) {
+    int high = allNodes.size() -1;
+    unsigned int low = 0;
+
+    while (low <= high) {
+        unsigned int mid = low + (high - low) / 2;
+
+        if (allNodes.at(mid).id == idNode) {
+            return mid;
+        }
+        else if (allNodes.at(mid).id < idNode)
+            low = mid + 1;
+        else if (idNode < allNodes.at(mid).id)
+            high = mid - 1;
+    }
+    return INT_MAX;
+}
+
+template<class T>
 void Graph<T>::addEdge(unsigned int idStart, unsigned int idEnd, int weight) {
     Edge<T> newEdge;
 
@@ -108,13 +112,28 @@ bool Graph<T>::eraseEdge(unsigned int start, unsigned int end, int weight) {
 }
 
 template<class T>
-std::vector<unsigned int> Graph<T>::BFS(unsigned int idxStartNode) {
+std::vector<unsigned int> Graph<T>::BFS(unsigned int idxNode) {
     setAllNotVisited();
 
     std::queue<unsigned int> nodesIdQueue;
-    std::vector<unsigned int> idPath = {idxStartNode};
+    std::vector<unsigned int> idPath = {idxNode};
 
-    allNodes.at(idxStartNode).visited = true;
-    add
+    allNodes.at(idxNode).visited = true;
+
+    while (!nodesIdQueue.empty()){
+        idxNode = nodesIdQueue.front();
+        nodesIdQueue.pop();
+
+        allNodes.at(idxNode).visited = true;
+
+        for (int next : allNodes.at(idxNode).adj){
+            int idx = findNodeIndex(next);
+            if (allNodes.at(idx).visited == false)
+            {
+                nodesIdQueue.push(idx);
+            }
+        }
+        //nodesIdQueue.
+    }
 }
 
