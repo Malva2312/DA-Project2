@@ -8,6 +8,7 @@
 #include <vector>
 #include <cmath>
 #include <algorithm>
+#include <climits>
 
 template <class T> struct Edge;
 template <class T> struct Node;
@@ -15,7 +16,7 @@ template <class T> class Graph;
 
 template <class T>
 struct Node{
-    std::vector<T> adj;
+    std::vector<Edge<T>> adj;
     unsigned int id;
     bool visited;
     T value;
@@ -24,6 +25,7 @@ struct Node{
 template <class T>
 struct Edge{
     unsigned int weight;
+    int duration;
     Node<T> * next;
     bool used;
 };
@@ -32,7 +34,7 @@ template <class T>
 class Graph {
 private:
     std::vector<Node<T>> allNodes;
-    unsigned int idCounter = 0;
+    unsigned int idCounter = 1;
     //bool dir;
 public:
     Graph(); // se o graph é dirigido
@@ -45,7 +47,7 @@ public:
     unsigned int size(); //numero de nodes
     unsigned int findNodeIndex(T value); //recebe um valor de um nó, retorna a sua posição
     unsigned int findNodeIndex(unsigned int idNode);
-    void addEdge(unsigned int idStart, unsigned int idEnd, int weight); //adiciona edge de start -> end se for dir// se !dir adiciona start<->end
+    void addEdge(unsigned int idStart, unsigned int idEnd, int weight, int duration); //adiciona edge de start -> end se for dir// se !dir adiciona start<->end
     bool eraseEdge(unsigned int start, unsigned int end, int weight);//elimina edge de start -> end se for dir// se !dir elimina start<->end
     std::vector<unsigned int> BFS(unsigned int idxStartNode);//vetor com os idx ordenados pela ordem que são encontrados na BFS
 

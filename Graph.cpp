@@ -33,6 +33,7 @@ template<class T>
 bool Graph<T>::removeNode(unsigned int idNode) {
     int pos = findNodeIndex(idNode);
     allNodes.erase(allNodes.begin() + pos);
+    return true;
 }
 
 template<class T>
@@ -89,14 +90,14 @@ unsigned int Graph<T>::findNodeIndex(unsigned int idNode) {
 }
 
 template<class T>
-void Graph<T>::addEdge(unsigned int idStart, unsigned int idEnd, int weight) {
+void Graph<T>::addEdge(unsigned int idStart, unsigned int idEnd, int weight, int duration) {
     Edge<T> newEdge;
 
+    newEdge.duration = duration;
     newEdge.weight = weight;
-    newEdge.next = &(allNodes.at(idEnd));
+    newEdge.next = &(allNodes.at(idEnd-1));
     newEdge.used = false;
-
-    allNodes.at(idStart).adj.push_back(newEdge);
+    allNodes.at(idStart-1).adj.push_back(newEdge);
 }
 
 template<class T>
@@ -135,5 +136,6 @@ std::vector<unsigned int> Graph<T>::BFS(unsigned int idxNode) {
         }
         //nodesIdQueue.
     }
+    return idPath;
 }
 

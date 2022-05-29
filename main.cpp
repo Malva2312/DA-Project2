@@ -1,10 +1,19 @@
 #include <iostream>
 #include "Graph.cpp"
+#include "FileReader.h"
 
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
-
+    Graph<int> test = Graph<int>();
+    FileReader fileReader;
+    fileReader.initGraph(&test);
+    for (int i=0;i<test.getAllNodes().size();i++){
+        //cout<<test.getAllNodes()[i].id<<endl;
+        for (int j=0;j<test.getAllNodes()[i].adj.size();j++){
+            cout<<"next id: "<<test.getAllNodes()[i].adj[j].next->id<<" capacity: "<<test.getAllNodes()[i].adj[j].weight<<" duration: "<< test.getAllNodes()[i].adj[j].duration<<endl;
+        }
+    }
+    /*
     Graph<int> test = Graph<int>();
     test.addNode(0);
     test.addNode(1);
@@ -27,5 +36,6 @@ int main() {
     for (int boo : foo){
         std::cout << boo << std::endl;
     }
+     */
     return 0;
 }

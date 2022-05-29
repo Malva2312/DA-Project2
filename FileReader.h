@@ -1,11 +1,6 @@
-//
-// Created by Utilizador on 27/05/2022.
-//
 
 #ifndef DA_PROJECT2_FILEREADER_H
 #define DA_PROJECT2_FILEREADER_H
-
-
 
 #include <fstream>
 #include "Graph.h"
@@ -16,16 +11,13 @@ class FileReader {
 
 public:
     FileReader();
-    int fileLines();
-    void readEdges();
-
-    const Graph<int> &getGraph() const;
+    void initGraph(Graph<int> * graph) const;
 
 private:
-    Graph<int> graph;
-    int lines;
+    int nodesNumber;
 };
 
 
 
 #endif //DA_PROJECT2_FILEREADER_H
+
