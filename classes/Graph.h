@@ -10,6 +10,8 @@
 #include <algorithm>
 #include <climits>
 #include <queue>
+#include <map>
+#include "maxHeap.h"
 
 template <class T> struct Edge;
 template <class T> struct Node;
@@ -21,6 +23,11 @@ struct Node{
     unsigned int id;
     bool visited;
     T value;
+
+    /* needed to calculate maximum capacity*/
+    Node<T> * parent;  //parent
+    unsigned int capacity; // capacity: parent -> this
+
 };
 
 template <class T>
@@ -52,6 +59,7 @@ public:
     bool eraseEdge(unsigned int start, unsigned int end, int weight);//elimina edge de start -> end se for dir// se !dir elimina start<->end
     std::vector<Node<T> * > BFS(unsigned int idxStartNode);//vetor com os idx ordenados pela ordem que são encontrados na BFS
 
+    void maxCapacity(unsigned int startIdx);
 };
 
 #endif //DA_PROJECT2_GRAPH_H

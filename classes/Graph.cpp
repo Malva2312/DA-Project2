@@ -141,3 +141,43 @@ std::vector<Node<T> * > Graph<T>::BFS(unsigned int idxNode) {
     return path;
 }
 
+template<class T>
+void Graph<T>::maxCapacity(unsigned int startIdx) {
+    unsigned int idx = findNodeIndex(startIdx);
+
+    for (unsigned int i = 0; i < allNodes.size(); i++)
+    {
+        allNodes.at(i).parent = nullptr;
+        allNodes.at(i).capacity = 0;
+    }
+
+    allNodes.at(idx).capacity = INT_MAX;
+
+    maxHeap<Node<T> *> pQueue;
+    pQueue.push(
+            allNodes.at(idx).capacity,
+            &allNodes.at(idx)
+            );
+
+    //std::vector<>
+
+    while (!pQueue.empty()){
+
+        std::pair<int, Node<T>*> node = pQueue.top();
+        pQueue.pop();
+
+        for (Edge<T> edge : node.second->adj){
+            unsigned int cap = std::min( (unsigned int) node.second->capacity, edge.weight);
+            if (cap > edge.next->capacity ){
+                edge.next->capacity = cap;
+                edge.next->parent = node.second;
+                pQueue.push(
+                        cap,
+                        edge.next
+                );
+            }
+        }
+    }
+
+}
+
