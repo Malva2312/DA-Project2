@@ -1,7 +1,4 @@
 #include "FileReader.h"
-#include "Graph.cpp"
-#include <iostream>
-#include <sstream>
 
 
 FileReader::FileReader(){

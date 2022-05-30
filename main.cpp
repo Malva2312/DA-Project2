@@ -1,9 +1,10 @@
 #include <iostream>
-#include "Graph.cpp"
-#include "FileReader.h"
+#include "classes/Graph.h"
+#include "classes/FileReader.h"
 
 
 int main() {
+    /*
     Graph<int> test = Graph<int>();
     FileReader fileReader;
     fileReader.initGraph(&test);
@@ -13,7 +14,8 @@ int main() {
             cout<<"next id: "<<test.getAllNodes()[i].adj[j].next->id<<" capacity: "<<test.getAllNodes()[i].adj[j].weight<<" duration: "<< test.getAllNodes()[i].adj[j].duration<<endl;
         }
     }
-    /*
+     */
+
     Graph<int> test = Graph<int>();
     test.addNode(0);
     test.addNode(1);
@@ -31,11 +33,17 @@ int main() {
     test.addNode(10);
     test.addNode(11);
 
+    test.addEdge(0 , 1 , 0, 0);
+    test.addEdge(0 , 2 , 0, 0);
+    test.addEdge(1 , 2 , 0, 0);
+    test.addEdge(2 , 3 , 0, 0);
+    test.addEdge(3 , 4 , 0, 0);
+    test.addEdge(4 , 5 , 0, 0);
+    test.addEdge(0 , 6 , 0, 0);
 
-    auto foo = test.BFS(0);
-    for (int boo : foo){
-        std::cout << boo << std::endl;
+    for (Node<int>* boo : test.BFS(0)){
+        std::cout << boo->value << std::endl;
     }
-     */
+
     return 0;
 }

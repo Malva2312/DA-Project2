@@ -2,9 +2,10 @@
 #ifndef DA_PROJECT2_FILEREADER_H
 #define DA_PROJECT2_FILEREADER_H
 
+#include <iostream>
+#include <sstream>
 #include <fstream>
-#include "Graph.h"
-
+#include "Graph.cpp"
 using namespace std;
 
 class FileReader {

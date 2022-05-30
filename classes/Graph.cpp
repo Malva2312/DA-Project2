@@ -2,7 +2,6 @@
 // Created by Utilizador on 12/05/2022.
 //
 
-#include <queue>
 #include "Graph.h"
 
 
@@ -90,14 +89,14 @@ unsigned int Graph<T>::findNodeIndex(unsigned int idNode) {
 }
 
 template<class T>
-void Graph<T>::addEdge(unsigned int idStart, unsigned int idEnd, int weight, int duration) {
+void Graph<T>::addEdge(unsigned int idxStart, unsigned int idxEnd, int weight, int duration) {
     Edge<T> newEdge;
 
     newEdge.duration = duration;
     newEdge.weight = weight;
-    newEdge.next = &(allNodes.at(idEnd-1));
+    newEdge.next = &(allNodes.at(idxEnd));
     newEdge.used = false;
-    allNodes.at(idStart-1).adj.push_back(newEdge);
+    allNodes.at(idxStart).adj.push_back(newEdge);
 }
 
 template<class T>
@@ -113,29 +112,32 @@ bool Graph<T>::eraseEdge(unsigned int start, unsigned int end, int weight) {
 }
 
 template<class T>
-std::vector<unsigned int> Graph<T>::BFS(unsigned int idxNode) {
+std::vector<Node<T> * > Graph<T>::BFS(unsigned int idxNode) {
+
     setAllNotVisited();
 
-    std::queue<unsigned int> nodesIdQueue;
-    std::vector<unsigned int> idPath = {idxNode};
+    std::queue<Node<T> *> nodesQueue;
+    nodesQueue.push(&allNodes.at(idxNode));
+    std::vector<Node<T>*> path;
 
     allNodes.at(idxNode).visited = true;
 
-    while (!nodesIdQueue.empty()){
-        idxNode = nodesIdQueue.front();
-        nodesIdQueue.pop();
+    Node<T> * node;
+    while (!nodesQueue.empty()){
 
-        allNodes.at(idxNode).visited = true;
+        node = nodesQueue.front();
+        nodesQueue.pop();
 
-        for (int next : allNodes.at(idxNode).adj){
-            int idx = findNodeIndex(next);
-            if (allNodes.at(idx).visited == false)
+        for (Edge<T> edge : node->adj){
+
+            if (edge.next->visited == false)
             {
-                nodesIdQueue.push(idx);
+                edge.next->visited = true;
+                nodesQueue.push(edge.next);
             }
         }
-        //nodesIdQueue.
+        path.push_back(node);
     }
-    return idPath;
+    return path;
 }
 

@@ -9,6 +9,7 @@
 #include <cmath>
 #include <algorithm>
 #include <climits>
+#include <queue>
 
 template <class T> struct Edge;
 template <class T> struct Node;
@@ -34,10 +35,10 @@ template <class T>
 class Graph {
 private:
     std::vector<Node<T>> allNodes;
-    unsigned int idCounter = 1;
+    unsigned int idCounter = 0;
     //bool dir;
 public:
-    Graph(); // se o graph é dirigido
+    Graph();
     bool operator== (Graph<T> A);
     unsigned int addNode(T value); //adicionar um node com um valor
     bool removeNode(unsigned int value); //remover um node pelo seu index
@@ -49,7 +50,7 @@ public:
     unsigned int findNodeIndex(unsigned int idNode);
     void addEdge(unsigned int idStart, unsigned int idEnd, int weight, int duration); //adiciona edge de start -> end se for dir// se !dir adiciona start<->end
     bool eraseEdge(unsigned int start, unsigned int end, int weight);//elimina edge de start -> end se for dir// se !dir elimina start<->end
-    std::vector<unsigned int> BFS(unsigned int idxStartNode);//vetor com os idx ordenados pela ordem que são encontrados na BFS
+    std::vector<Node<T> * > BFS(unsigned int idxStartNode);//vetor com os idx ordenados pela ordem que são encontrados na BFS
 
 };
 
