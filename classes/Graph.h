@@ -57,7 +57,7 @@ public:
     unsigned int size(); //numero de nodes
     unsigned int findNodeIndex(T value); //recebe um valor de um nó, retorna a sua posição
     unsigned int findNodeIndex(unsigned int idNode);
-    void addEdge(unsigned int idStart, unsigned int idEnd, int weight, int duration); //adiciona edge de start -> end se for dir// se !dir adiciona start<->end
+    void addEdge(unsigned int idStart, unsigned int idEnd, int weight, int duration = 0); //adiciona edge de start -> end se for dir// se !dir adiciona start<->end
     bool eraseEdge(unsigned int start, unsigned int end, int weight);//elimina edge de start -> end se for dir// se !dir elimina start<->end
     std::vector<Node<T> * > BFS(unsigned int idxStartNode);//vetor com os idx ordenados pela ordem que são encontrados na BFS
 
