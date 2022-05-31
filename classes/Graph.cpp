@@ -181,3 +181,43 @@ void Graph<T>::maxCapacity(unsigned int startIdx) {
 
 }
 
+template<class T>
+Graph<T> Graph<T>::updateRGraph(Graph<T> G) {
+    Graph<T> Gr;
+
+    for (unsigned int idx = 0; idx < size(); idx++)
+    {
+        for (unsigned int edge = 0; edge < allNodes.at(idx).adj.size(); edge++)
+        {
+            unsigned int flow = allNodes.at(idx).adj.at(edge).flow;
+            unsigned int cap = allNodes.at(idx).adj.at(edge).weight;
+            if (flow < cap){
+                //residual addEdge(,,cap - flow);
+            }
+            if (flow > 0){
+                //residual addEdge(,,cap - flow);
+            }
+        }
+    }
+    return  Gr;
+
+}
+
+
+template<class T>
+void Graph<T>::fordFulkerson(unsigned int idStart, unsigned int idEnd) {
+    for (unsigned int idx = 0; idx < size(); idx++)
+    {
+        for (unsigned int edge = 0; edge < allNodes.at(idx).adj.size(); edge++)
+        {
+            allNodes.at(idx).adj.at(edge).flow = 0;
+        }
+    }
+
+    Graph<T> Gr = updateRGraph(this);
+
+    //Graph::Graph<T>
+}
+
+
+

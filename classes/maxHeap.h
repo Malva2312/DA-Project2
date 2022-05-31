@@ -129,6 +129,7 @@ public:
         catch (const std::out_of_range &oor) {
             std::cout << std::endl << oor.what();
         }
+        return std::pair<int, T> (0, nullptr);
     }
 };
 

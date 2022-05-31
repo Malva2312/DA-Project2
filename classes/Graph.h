@@ -35,7 +35,9 @@ struct Edge{
     unsigned int weight;
     int duration;
     Node<T> * next;
+
     bool used;
+    unsigned int flow;
 };
 
 template <class T>
@@ -60,6 +62,8 @@ public:
     std::vector<Node<T> * > BFS(unsigned int idxStartNode);//vetor com os idx ordenados pela ordem que são encontrados na BFS
 
     void maxCapacity(unsigned int startIdx);
+    void fordFulkerson(unsigned int idStart, unsigned int idEnd);
+    Graph<T> updateRGraph(Graph<T> G);
 };
 
 #endif //DA_PROJECT2_GRAPH_H
