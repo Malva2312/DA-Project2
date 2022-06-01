@@ -2,6 +2,7 @@
 #include "classes/Graph.h"
 #include "classes/FileReader.h"
 #include "classes/maxHeap.h"
+#include "classes/app.h"
 
 
 int main() {
@@ -76,6 +77,7 @@ int main() {
     for (Node<int>* boo : test.BFS(1)){
         std::cout << boo->value << std::endl;
     }*/
-
+    app App;
+    return App.run();
     return 0;
 }
