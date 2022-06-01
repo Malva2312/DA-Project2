@@ -1,10 +1,10 @@
 #include "FileReader.h"
 
 
-FileReader::FileReader(){
+FileReader::FileReader(std::string filename) : fileName(filename){
     string line;
     ifstream file;
-    file.open("../Tests/in01.txt");
+    file.open(fileName);
     if (!file.is_open()){
         cout<<"File not Found"<<endl;
     }
@@ -19,7 +19,7 @@ void FileReader::initGraph(Graph<int> *graph) const {
     int firstLineSkip=0;
     string line;
     ifstream file;
-    file.open("../Tests/in01.txt");
+    file.open(fileName);
     if (!file.is_open()){
         cout<<"File not Found"<<endl;
     }
@@ -34,7 +34,7 @@ void FileReader::initGraph(Graph<int> *graph) const {
         while(getline(str,word,' ')){
             row.push_back(word);
         }
-        graph->addEdge(stoi(row[0]) - 1 ,stoi(row[1]) - 1 ,stoi(row[2]),stoi(row[3]));
+        graph->addEdge(graph->findNodeIndex( stoi(row[0]) ) ,graph->findNodeIndex(stoi(row[1])) ,stoi(row[2]),stoi(row[3]));
     }
 
     /*

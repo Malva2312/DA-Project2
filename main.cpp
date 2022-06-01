@@ -5,9 +5,12 @@
 
 
 int main() {
+    string filename = "../Tests/in05.txt";
+    int dest = 1000;
+
 
     Graph<int> test = Graph<int>();
-    FileReader fileReader;
+    FileReader fileReader(filename);
     fileReader.initGraph(&test);
     /*    for (int i=0;i<test.getAllNodes().size();i++){
         //cout<<test.getAllNodes()[i].id<<endl;
@@ -47,7 +50,6 @@ int main() {
     test.addEdge(5 , 6 ,  8, 0);
     test.addEdge(6 , 0 , 30, 0);
 */
-    test.maxCapacity( 0);
 /*
     for (auto node : test.getAllNodes()){
         if (node.parent == nullptr && node.capacity == INT_MAX){
@@ -59,8 +61,17 @@ int main() {
         else cout << node.parent->value << "  "<< node.capacity <<endl;
     }*/
 
-    
+    test.maxCapacity( 0);
 
+    int idx  = test.findNodeIndex(dest);
+
+    vector<Node<int>*> node = test.getAllNodesPtr();
+    cout << "cap : " << node.at(idx)->capacity <<endl;
+    while (node.at(idx)->parent != nullptr){
+        cout << node.at(idx)->value << " - ";
+        idx = test.findNodeIndex(node.at(idx)->parent->id);
+    }
+    cout << node.at(idx)->value;
     /*
     for (Node<int>* boo : test.BFS(1)){
         std::cout << boo->value << std::endl;

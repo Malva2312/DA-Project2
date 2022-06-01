@@ -11,11 +11,12 @@ using namespace std;
 class FileReader {
 
 public:
-    FileReader();
+    FileReader(string filename);
     void initGraph(Graph<int> * graph) const;
 
 private:
     int nodesNumber;
+    string const fileName;
 };
 
 

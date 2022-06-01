@@ -46,7 +46,7 @@ template <class T>
 class Graph {
 private:
     std::vector<Node<T>> allNodes;
-    unsigned int idCounter = 0;
+    unsigned int idCounter = 1;
     //bool dir;
 public:
     Graph();
@@ -55,8 +55,8 @@ public:
     bool removeNode(unsigned int value); //remover um node pelo seu index
     void setAllNotVisited(); //todos os nodes não visitados
     std::vector<Node<T>> getAllNodes() const; //recebe o vetor dos nodes
-    std::vector<Node<T>> getAllNodesPtr() const; //recebe um vetor com Ptr dos nodes
-    unsigned int size(); //numero de nodes
+    std::vector<Node<T>*> getAllNodesPtr(); //recebe um vetor com Ptr dos nodes
+    unsigned int size() const; //numero de nodes
     //unsigned int findNodeIndex(T value); //recebe um valor de um nó, retorna a sua posição
     unsigned int findNodeIndex(unsigned int idNode);
     void addEdge(unsigned int idxStart, unsigned int idxEnd, int weight, int duration = 0); //adiciona edge de start -> end se for dir// se !dir adiciona start<->end

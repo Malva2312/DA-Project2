@@ -48,16 +48,16 @@ std::vector<Node<T>> Graph<T>::getAllNodes() const {
 }
 
 template<class T>
-std::vector<Node<T>> Graph<T>::getAllNodesPtr() const {
-    std::vector<Node<T>> allNodesPtr;
-    for (Node<T> node : allNodes){
-        allNodesPtr.push_back(&node);
+std::vector<Node<T> *> Graph<T>::getAllNodesPtr() {
+    std::vector<Node<T>*> allNodesPtr;
+    for (unsigned int idx = 0; idx < size(); idx++){
+        allNodesPtr.push_back(&allNodes.at(idx));
     }
     return allNodesPtr;
 }
 
 template<class T>
-unsigned int Graph<T>::size() {
+unsigned int Graph<T>::size() const{
     return allNodes.size();
 }
 
@@ -95,10 +95,10 @@ void Graph<T>::addEdge(unsigned int idxStart, unsigned int idxEnd, int weight, i
 
     newEdge.duration = duration;
     newEdge.weight = weight;
-    newEdge.next = &(allNodes.at(findNodeIndex(idxEnd)));
-    newEdge.prev = &(allNodes.at(findNodeIndex(idxStart)));
+    newEdge.next = &(allNodes.at(idxEnd));
+    newEdge.prev = &(allNodes.at(idxStart));
     newEdge.used = false;
-    allNodes.at(findNodeIndex(idxStart)).adj.push_back(newEdge);
+    allNodes.at(idxStart).adj.push_back(newEdge);
 }
 
 template<class T>
