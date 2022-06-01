@@ -5,17 +5,18 @@
 
 
 int main() {
-    /*
+
     Graph<int> test = Graph<int>();
     FileReader fileReader;
     fileReader.initGraph(&test);
-    for (int i=0;i<test.getAllNodes().size();i++){
+    /*    for (int i=0;i<test.getAllNodes().size();i++){
         //cout<<test.getAllNodes()[i].id<<endl;
         for (int j=0;j<test.getAllNodes()[i].adj.size();j++){
             cout<<"next id: "<<test.getAllNodes()[i].adj[j].next->id<<" capacity: "<<test.getAllNodes()[i].adj[j].weight<<" duration: "<< test.getAllNodes()[i].adj[j].duration<<endl;
         }
     }
-     */
+
+    /*
      Graph<int> test = Graph<int>();
      test.addNode(0);
      test.addNode(1);
@@ -33,7 +34,7 @@ int main() {
      test.addNode(9);
      test.addNode(10);
      test.addNode(11);
-*/
+
     test.addEdge(0 , 1 ,  1, 0);
     test.addEdge(0 , 2 ,  2, 0);
     test.addEdge(1 , 3 ,  4, 0);
@@ -45,8 +46,8 @@ int main() {
     test.addEdge(4 , 6 ,  9, 0);
     test.addEdge(5 , 6 ,  8, 0);
     test.addEdge(6 , 0 , 30, 0);
-
-    test.maxCapacity( 6);
+*/
+    test.maxCapacity( 0);
 
     for (auto node : test.getAllNodes()){
         if (node.parent == nullptr && node.capacity == INT_MAX){

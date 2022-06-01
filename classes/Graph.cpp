@@ -61,13 +61,14 @@ unsigned int Graph<T>::size() {
     return allNodes.size();
 }
 
+/*
 template<class T>
 unsigned int Graph<T>::findNodeIndex(T value) {
     for (unsigned int idx; idx < allNodes.size(); ++idx){
         if (allNodes.at(idx).value == value) return idx;
     }
     return INT_MAX;
-}
+}*/
 
 template<class T>
 unsigned int Graph<T>::findNodeIndex(unsigned int idNode) {
@@ -89,14 +90,15 @@ unsigned int Graph<T>::findNodeIndex(unsigned int idNode) {
 }
 
 template<class T>
-void Graph<T>::addEdge(unsigned int idxStart, unsigned int idxEnd, int weight, int duration) {
+void Graph<T>::addEdge(unsigned int idStart, unsigned int idEnd, int weight, int duration) {
     Edge<T> newEdge;
 
     newEdge.duration = duration;
     newEdge.weight = weight;
-    newEdge.next = &(allNodes.at(idxEnd));
+    newEdge.next = &(allNodes.at(findNodeIndex(idStart)));
+    newEdge.prev = &(allNodes.at(findNodeIndex(idEnd)));
     newEdge.used = false;
-    allNodes.at(idxStart).adj.push_back(newEdge);
+    allNodes.at(findNodeIndex(idStart)).adj.push_back(newEdge);
 }
 
 template<class T>
@@ -143,7 +145,7 @@ std::vector<Node<T> * > Graph<T>::BFS(unsigned int idxNode) {
 
 template<class T>
 void Graph<T>::maxCapacity(unsigned int startIdx) {
-    unsigned int idx = findNodeIndex(startIdx);
+    //unsigned int idx = findNodeIndex(startId);
 
     for (unsigned int i = 0; i < allNodes.size(); i++)
     {
@@ -151,12 +153,12 @@ void Graph<T>::maxCapacity(unsigned int startIdx) {
         allNodes.at(i).capacity = 0;
     }
 
-    allNodes.at(idx).capacity = INT_MAX;
+    allNodes.at(startIdx).capacity = INT_MAX;
 
     maxHeap<Node<T> *> pQueue;
     pQueue.push(
-            allNodes.at(idx).capacity,
-            &allNodes.at(idx)
+            allNodes.at(startIdx).capacity,
+            &allNodes.at(startIdx)
             );
 
     //std::vector<>
@@ -187,27 +189,28 @@ Graph<T> Graph<T>::updateRGraph(Graph<T> G) {
 
     for (unsigned int idx = 0; idx < size(); idx)
     {
-        Gr.addNode(allNodes.at(idx).value);
-        Gr.getAllNodesPtr().at(idx).id = allNodes.at(idx).id;
+        Gr.addNode(G.getAllNodesPtr()->at(idx).value);
+        Gr.getAllNodesPtr().at(idx).id = G.getAllNodesPtr().at(idx).id;
     }
 
     for (unsigned int idx = 0; idx < size(); idx++)
     {
-        for (unsigned int edge = 0; edge < allNodes.at(idx).adj.size(); edge++)
+        for (unsigned int edge = 0; edge < G.getAllNodesPtr()->at(idx).adj.size(); edge++)
         {
-            unsigned int flow = allNodes.at(idx).adj.at(edge).flow;
-            unsigned int cap = allNodes.at(idx).adj.at(edge).weight;
+            unsigned int flow = G.getAllNodesPtr().at(idx).adj.at(edge).flow;
+            unsigned int cap = G.getAllNodesPtr().at(idx).adj.at(edge).weight;
             if (flow < cap){
                 //residual
                 Gr.addEdge(
-                        allNodes.at(idx).id,
-                        allNodes.at(idx).adj.at(edge).next->id,
+                        G.getAllNodesPtr().at(idx).id,
+                        G.getAllNodesPtr().at(idx).adj.at(edge).next->id,
                         cap - flow);
             }
             if (flow > 0){
                 //residual
-                addEdge(allNodes.at(idx).id,
-                        allNodes.at(idx).adj.at(edge).next->id,
+                addEdge(
+                        G.getAllNodesPtr().at(idx).adj.at(edge).next->id,
+                        G.getAllNodesPtr().at(idx).id,
                         flow);
             }
         }
@@ -218,7 +221,7 @@ Graph<T> Graph<T>::updateRGraph(Graph<T> G) {
 
 
 template<class T>
-void Graph<T>::fordFulkerson(unsigned int idStart, unsigned int idEnd) {
+void Graph<T>::fordFulkerson(unsigned int idxStart, unsigned int idxEnd) {
     for (unsigned int idx = 0; idx < size(); idx++)
     {
         for (unsigned int edge = 0; edge < allNodes.at(idx).adj.size(); edge++)
@@ -228,14 +231,19 @@ void Graph<T>::fordFulkerson(unsigned int idStart, unsigned int idEnd) {
     }
 
     Graph<T> Gr = updateRGraph(this);
-
-    while (true)
+/*
+    while (f)
     {
-        
-    }
 
+    }
+*/
     //Graph::Graph<T>
 }
 
+template<class T>
+void Graph<T>::increasePath(Graph<T> &Gr, unsigned int idx) {
+
+    return ;
+}
 
 

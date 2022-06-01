@@ -34,10 +34,12 @@ template <class T>
 struct Edge{
     unsigned int weight;
     int duration;
-    Node<T> * next;
+    Node<T> * next; //next
+
+    Node<T> * prev; //previus
 
     bool used;
-    unsigned int flow;
+    unsigned int flow = 0;
 };
 
 template <class T>
@@ -55,15 +57,16 @@ public:
     std::vector<Node<T>> getAllNodes() const; //recebe o vetor dos nodes
     std::vector<Node<T>> getAllNodesPtr() const; //recebe um vetor com Ptr dos nodes
     unsigned int size(); //numero de nodes
-    unsigned int findNodeIndex(T value); //recebe um valor de um nó, retorna a sua posição
+    //unsigned int findNodeIndex(T value); //recebe um valor de um nó, retorna a sua posição
     unsigned int findNodeIndex(unsigned int idNode);
-    void addEdge(unsigned int idStart, unsigned int idEnd, int weight, int duration = 0); //adiciona edge de start -> end se for dir// se !dir adiciona start<->end
+    void addEdge(unsigned int idxStart, unsigned int idxEnd, int weight, int duration = 0); //adiciona edge de start -> end se for dir// se !dir adiciona start<->end
     bool eraseEdge(unsigned int start, unsigned int end, int weight);//elimina edge de start -> end se for dir// se !dir elimina start<->end
     std::vector<Node<T> * > BFS(unsigned int idxStartNode);//vetor com os idx ordenados pela ordem que são encontrados na BFS
 
     void maxCapacity(unsigned int startIdx);
-    void fordFulkerson(unsigned int idStart, unsigned int idEnd);
+    void fordFulkerson(unsigned int idxStart, unsigned int idxEnd);
     Graph<T> updateRGraph(Graph<T> G);
+    void increasePath(Graph<T> &Gr, unsigned int idx); //BFS
 };
 
 #endif //DA_PROJECT2_GRAPH_H
