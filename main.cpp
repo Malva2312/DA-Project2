@@ -48,7 +48,7 @@ int main() {
     test.addEdge(6 , 0 , 30, 0);
 */
     test.maxCapacity( 0);
-
+/*
     for (auto node : test.getAllNodes()){
         if (node.parent == nullptr && node.capacity == INT_MAX){
             cout << "origin  " << node.capacity << endl;
@@ -57,7 +57,10 @@ int main() {
             continue;
         }
         else cout << node.parent->value << "  "<< node.capacity <<endl;
-    }
+    }*/
+
+    
+
     /*
     for (Node<int>* boo : test.BFS(1)){
         std::cout << boo->value << std::endl;

@@ -90,15 +90,15 @@ unsigned int Graph<T>::findNodeIndex(unsigned int idNode) {
 }
 
 template<class T>
-void Graph<T>::addEdge(unsigned int idStart, unsigned int idEnd, int weight, int duration) {
+void Graph<T>::addEdge(unsigned int idxStart, unsigned int idxEnd, int weight, int duration) {
     Edge<T> newEdge;
 
     newEdge.duration = duration;
     newEdge.weight = weight;
-    newEdge.next = &(allNodes.at(findNodeIndex(idStart)));
-    newEdge.prev = &(allNodes.at(findNodeIndex(idEnd)));
+    newEdge.next = &(allNodes.at(findNodeIndex(idxEnd)));
+    newEdge.prev = &(allNodes.at(findNodeIndex(idxStart)));
     newEdge.used = false;
-    allNodes.at(findNodeIndex(idStart)).adj.push_back(newEdge);
+    allNodes.at(findNodeIndex(idxStart)).adj.push_back(newEdge);
 }
 
 template<class T>

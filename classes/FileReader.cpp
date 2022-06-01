@@ -34,7 +34,7 @@ void FileReader::initGraph(Graph<int> *graph) const {
         while(getline(str,word,' ')){
             row.push_back(word);
         }
-        graph->addEdge(stoi(row[0]),stoi(row[1]),stoi(row[2]),stoi(row[3]));
+        graph->addEdge(stoi(row[0]) - 1 ,stoi(row[1]) - 1 ,stoi(row[2]),stoi(row[3]));
     }
 
     /*
