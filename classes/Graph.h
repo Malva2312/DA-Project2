@@ -26,6 +26,8 @@ struct Node{
 
     /* needed to calculate maximum capacity*/
     Node<T> * parent;  //parent
+    Edge<T> * parentEdge;
+
     unsigned int capacity; // capacity: parent -> this
 
 };
@@ -54,6 +56,7 @@ public:
     unsigned int addNode(T value); //adicionar um node com um valor
     bool removeNode(unsigned int value); //remover um node pelo seu index
     void setAllNotVisited(); //todos os nodes não visitados
+    void setAllParentNull();
     std::vector<Node<T>> getAllNodes() const; //recebe o vetor dos nodes
     std::vector<Node<T>*> getAllNodesPtr(); //recebe um vetor com Ptr dos nodes
     unsigned int size() const; //numero de nodes
@@ -61,12 +64,12 @@ public:
     unsigned int findNodeIndex(unsigned int idNode);
     void addEdge(unsigned int idxStart, unsigned int idxEnd, int weight, int duration = 0); //adiciona edge de start -> end se for dir// se !dir adiciona start<->end
     bool eraseEdge(unsigned int start, unsigned int end, int weight);//elimina edge de start -> end se for dir// se !dir elimina start<->end
-    std::vector<Node<T> * > BFS(unsigned int idxStartNode);//vetor com os idx ordenados pela ordem que são encontrados na BFS
+    std::vector<Node<T> * > BFS(Graph<T> &G,  unsigned int idxStartNode);//vetor com os idx ordenados pela ordem que são encontrados na BFS
 
     void maxCapacity(unsigned int startIdx);
-    void fordFulkerson(unsigned int idxStart, unsigned int idxEnd);
+    unsigned int fordFulkerson(unsigned int idxStart, unsigned int idxEnd); //
     Graph<T> updateRGraph(Graph<T> G);
-    void increasePath(Graph<T> &Gr, unsigned int idx); //BFS
+    //void increasePath(Graph<T> &Gr, unsigned int idx); //BFS
 };
 
 #endif //DA_PROJECT2_GRAPH_H

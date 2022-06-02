@@ -114,15 +114,18 @@ bool Graph<T>::eraseEdge(unsigned int start, unsigned int end, int weight) {
 }
 
 template<class T>
-std::vector<Node<T> * > Graph<T>::BFS(unsigned int idxNode) {
+std::vector<Node<T> * > Graph<T>::BFS(Graph<T> &G, unsigned int idxNode) {
 
-    setAllNotVisited();
+    G.setAllNotVisited();
+    G.setAllParentNull();
 
     std::queue<Node<T> *> nodesQueue;
-    nodesQueue.push(&allNodes.at(idxNode));
-    std::vector<Node<T>*> path;
+    std::vector<Node<T> *> Nodes = G.getAllNodesPtr();
 
-    allNodes.at(idxNode).visited = true;
+    nodesQueue.push(Nodes.at(idxNode));
+    std::vector<Node<T>*> order;
+
+    Nodes.at(idxNode)->visited = true;
 
     Node<T> * node;
     while (!nodesQueue.empty()){
@@ -135,12 +138,13 @@ std::vector<Node<T> * > Graph<T>::BFS(unsigned int idxNode) {
             if (edge.next->visited == false)
             {
                 edge.next->visited = true;
+                edge.next->parent = node;
                 nodesQueue.push(edge.next);
             }
         }
-        path.push_back(node);
+        order.push_back(node);
     }
-    return path;
+    return order;
 }
 
 template<class T>
@@ -187,10 +191,11 @@ template<class T>
 Graph<T> Graph<T>::updateRGraph(Graph<T> G) {
     Graph<T> Gr; //residual graph
 
+    std::vector<Node<T> *> NODES = G.getAllNodesPtr();
     for (unsigned int idx = 0; idx < size(); idx)
     {
-        Gr.addNode(G.getAllNodesPtr()->at(idx).value);
-        Gr.getAllNodesPtr().at(idx).id = G.getAllNodesPtr().at(idx).id;
+        Gr.addNode(NODES.at(idx).value);
+        Gr.getAllNodesPtr().at(idx).id = NODES.at(idx).id;
     }
 
     for (unsigned int idx = 0; idx < size(); idx++)
@@ -221,7 +226,7 @@ Graph<T> Graph<T>::updateRGraph(Graph<T> G) {
 
 
 template<class T>
-void Graph<T>::fordFulkerson(unsigned int idxStart, unsigned int idxEnd) {
+unsigned int Graph<T>::fordFulkerson(unsigned int idxStart, unsigned int idxEnd) {
     for (unsigned int idx = 0; idx < size(); idx++)
     {
         for (unsigned int edge = 0; edge < allNodes.at(idx).adj.size(); edge++)
@@ -231,6 +236,16 @@ void Graph<T>::fordFulkerson(unsigned int idxStart, unsigned int idxEnd) {
     }
 
     Graph<T> Gr = updateRGraph(this);
+
+    while (true){
+        //buscar um caminho de encremento
+        BFS(Gr, idxStart);
+        if (Gr.getAllNodesPtr().at(idxEnd)->parent == nullptr) break; //n existem mais caminhos
+
+
+    }
+
+
 /*
     while (f)
     {
@@ -241,9 +256,25 @@ void Graph<T>::fordFulkerson(unsigned int idxStart, unsigned int idxEnd) {
 }
 
 template<class T>
+void Graph<T>::setAllParentNull() {
+    for (unsigned int idx = 0; idx < allNodes.size(); idx++)
+    {
+        allNodes.at(idx).parent = nullptr;
+    }
+}
+/*
+template<class T>
 void Graph<T>::increasePath(Graph<T> &Gr, unsigned int idx) {
+    Gr.setAllNotVisited();
+
+    std::queue<Node<T>*> nodesQueue;
+    std::vector<Node<T> *> node = Gr.getAllNodesPtr();
+    nodesQueue.push(node->at(idx));
+
+    node.at(idx)->visited = true
+
 
     return ;
 }
-
+*/
 
