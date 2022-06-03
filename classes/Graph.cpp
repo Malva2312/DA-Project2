@@ -244,7 +244,6 @@ Graph<T> Graph<T>::updateRGraph(Graph<T> &G) {
         }
     }
     return  Gr;
-
 }
 
 
@@ -316,6 +315,24 @@ void Graph<T>::setAllParentNull() {
     {
         allNodes.at(idx).parent = nullptr;
         allNodes.at(idx).parentEdge = nullptr;
+    }
+}
+
+template<class T>
+void Graph<T>::scenario2_1(int size, int start, int finish) {
+    edmondsKarp(start,finish);
+    while (size>0){
+        //BFS()
+        int minFlow;
+        if (minFlow-size>=0){
+            //cout path and size
+            break;
+        }
+        size-=minFlow;
+        //cout path and size
+        //updte edges flow in path
+        //if new flow = 0, set as used
+
     }
 }
 /*
