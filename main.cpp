@@ -45,8 +45,8 @@ int main() {
 
     test.addNode(6);
 
-    test.addEdge(0 , 1 ,  1, 0);
-    test.addEdge(0 , 2 ,  2, 0);
+    test.addEdge(0 , 1 ,  100, 0);
+    test.addEdge(0 , 2 ,  100, 0);
     test.addEdge(1 , 3 ,  4, 0);
     test.addEdge(1 , 4 ,  5, 0);
     test.addEdge(2 , 1 ,  3, 0);
@@ -54,14 +54,14 @@ int main() {
     test.addEdge(2 , 5 ,  7, 0);
     test.addEdge(3 , 6 , 10, 0);
     test.addEdge(4 , 6 ,  9, 0);
-    test.addEdge(5 , 6 ,  8, 0);
+    test.addEdge(5 , 6 ,  1, 0);
     test.addEdge(6 , 0 , 30, 0);
 /**/
     //test.BFS(test, 0);
     int idx = 6; //id 6, value 6
     Node<int> * n = test.getAllNodesPtr().at(idx);
 
-    test.edmondsKarp(0, 6);
+    cout << test.edmondsKarp(0, 6) << endl;
 
 /*
     while (n->parentEdge != nullptr)

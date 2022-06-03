@@ -294,7 +294,19 @@ unsigned int Graph<T>::edmondsKarp(unsigned int idxStart, unsigned int idxEnd) {
         Gr = updateRGraph(*this);
 
     }
-    return 0;
+
+    for (unsigned int idxNode = 0; idxNode < allNodes.size(); idxNode++) allNodes.at(idxNode).capacity = 0;
+    for (unsigned int idxNode = 0; idxNode < allNodes.size(); idxNode++)
+    {
+        if (idxNode == idxStart) allNodes.at(idxNode).capacity = INT_MAX;
+
+        for (unsigned int idxEdge = 0; idxEdge < allNodes.at(idxNode).adj.size(); idxEdge++ )
+        {
+            allNodes.at(idxNode).adj.at(idxEdge).next->capacity += allNodes.at(idxNode).adj.at(idxEdge).flow;
+        }
+    }
+
+    return allNodes.at(idxEnd).capacity;
     //Graph::Graph<T>
 }
 
