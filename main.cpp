@@ -1,18 +1,19 @@
 #include <iostream>
 #include "classes/Graph.h"
 #include "classes/FileReader.h"
-#include "classes/app.h"
+#include "classes/App.h"
 
 int main() {
-    /*
+/*
     string filename = "../Tests/in01.txt";
-    int dest = 1000;
+    int dest = 50;
 
 
     Graph<int> test = Graph<int>();
     FileReader fileReader(filename);
     fileReader.initGraph(&test);
-        for (int i=0;i<test.getAllNodes().size();i++){
+    /*
+    for (int i=0;i<test.getAllNodes().size();i++){
         //cout<<test.getAllNodes()[i].id<<endl;
         for (int j=0;j<test.getAllNodes()[i].adj.size();j++){
             cout<<"next id: "<<test.getAllNodes()[i].adj[j].next->id<<" capacity: "<<test.getAllNodes()[i].adj[j].weight<<" duration: "<< test.getAllNodes()[i].adj[j].duration<<endl;
@@ -28,22 +29,9 @@ int main() {
         }
         else cout << node.parent->value << "  "<< node.capacity <<endl;
     }
+*/
 
-    test.maxCapacity( 0);
 
-    int idx  = test.findNodeIndex(dest);
-
-    vector<Node<int>*> node = test.getAllNodesPtr();
-    cout << "cap : " << node.at(idx)->capacity <<endl;
-    while (node.at(idx)->parent != nullptr){
-        cout << node.at(idx)->value << " - ";
-        idx = test.findNodeIndex(node.at(idx)->parent->id);
-    }
-    cout << node.at(idx)->value;
-
-    for (Node<int>* boo : test.BFS(1)){
-        std::cout << boo->value << std::endl;
-    }*/
 
 
     Graph<int> test = Graph<int>();
@@ -68,23 +56,24 @@ int main() {
     test.addEdge(4 , 6 ,  9, 0);
     test.addEdge(5 , 6 ,  8, 0);
     test.addEdge(6 , 0 , 30, 0);
+/**/
+    //test.BFS(test, 0);
+    int idx = 6; //id 6, value 6
+    Node<int> * n = test.getAllNodesPtr().at(idx);
 
-    test.BFS(test, 0);
-    int idx = 0; //id 6, value 6
-    while (test.getAllNodesPtr().at(idx)->parent != nullptr)
+    test.edmondsKarp(0, 6);
+
+/*
+    while (n->parentEdge != nullptr)
     {
-        cout << test.getAllNodesPtr().at(idx)->value<< " - ";
-        idx = test.getAllNodesPtr().at(idx)->parent->value;
+        cout << n->value << " - ";
+        n = n->parentEdge->prev;
     }
-    cout << endl;
-
-    /*test.BFS(test, 1);
-    test.BFS(test, 2);
+    cout << n->value;
 */
-
-    /*
-    app App;
-    return App.run();
-    */
+/*
+    App app;
+    return app.run();
+*/
     return 0;
 }

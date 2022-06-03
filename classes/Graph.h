@@ -11,7 +11,7 @@
 #include <climits>
 #include <queue>
 #include <map>
-#include "maxHeap.h"
+#include "MaxHeap.h"
 
 template <class T> struct Edge;
 template <class T> struct Node;
@@ -40,8 +40,11 @@ struct Edge{
 
     Node<T> * prev; //previus
 
-    bool used;
+    //bool used;
     unsigned int flow = 0;
+
+    //used on edmond //chek if the flow is returning
+    std::pair<Edge<T> *, bool> dir;
 };
 
 template <class T>
@@ -62,13 +65,13 @@ public:
     unsigned int size() const; //numero de nodes
     //unsigned int findNodeIndex(T value); //recebe um valor de um nó, retorna a sua posição
     unsigned int findNodeIndex(unsigned int idNode);
-    void addEdge(unsigned int idxStart, unsigned int idxEnd, int weight, int duration = 0); //adiciona edge de start -> end se for dir// se !dir adiciona start<->end
+    unsigned int addEdge(unsigned int idxStart, unsigned int idxEnd, int weight, int duration = 0); //adiciona edge de start -> end se for dir// se !dir adiciona start<->end
     bool eraseEdge(unsigned int start, unsigned int end, int weight);//elimina edge de start -> end se for dir// se !dir elimina start<->end
     std::vector<Node<T> * > BFS(Graph<T> &G,  unsigned int idxStartNode);//vetor com os idx ordenados pela ordem que são encontrados na BFS
 
     void maxCapacity(unsigned int startIdx);
-    unsigned int fordFulkerson(unsigned int idxStart, unsigned int idxEnd); //
-    Graph<T> updateRGraph(Graph<T> G);
+    unsigned int edmondsKarp(unsigned int idxStart, unsigned int idxEnd); //
+    Graph<T> updateRGraph(Graph<T> &G);
     //void increasePath(Graph<T> &Gr, unsigned int idx); //BFS
 };
 

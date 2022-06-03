@@ -90,15 +90,21 @@ unsigned int Graph<T>::findNodeIndex(unsigned int idNode) {
 }
 
 template<class T>
-void Graph<T>::addEdge(unsigned int idxStart, unsigned int idxEnd, int weight, int duration) {
+unsigned int Graph<T>::addEdge(unsigned int idxStart, unsigned int idxEnd, int weight, int duration) {
     Edge<T> newEdge;
 
     newEdge.duration = duration;
     newEdge.weight = weight;
     newEdge.next = &(allNodes.at(idxEnd));
     newEdge.prev = &(allNodes.at(idxStart));
-    newEdge.used = false;
+    //newEdge.used = false;
     allNodes.at(idxStart).adj.push_back(newEdge);
+
+    unsigned int pos = allNodes.at(idxStart).adj.size() -1;
+    allNodes.at(idxStart).adj.at(pos).dir.first = nullptr;
+    allNodes.at(idxStart).adj.at(pos).dir.second = true;
+
+    return pos;
 }
 
 template<class T>
@@ -133,13 +139,15 @@ std::vector<Node<T> * > Graph<T>::BFS(Graph<T> &G, unsigned int idxNode) {
         node = nodesQueue.front();
         nodesQueue.pop();
 
-        for (Edge<T> edge : node->adj){
+        for (unsigned int idxEdge = 0; idxEdge < node->adj.size(); idxEdge++){
 
-            if (edge.next->visited == false)
+            if (node->adj.at(idxEdge).next->visited == false)
             {
-                edge.next->visited = true;
-                edge.next->parent = node;
-                nodesQueue.push(edge.next);
+                node->adj.at(idxEdge).next->visited = true;
+                node->adj.at(idxEdge).next->parent = node;
+                node->adj.at(idxEdge).next->parentEdge = &node->adj.at(idxEdge);
+
+                nodesQueue.push(node->adj.at(idxEdge).next);
             }
         }
         order.push_back(node);
@@ -159,7 +167,7 @@ void Graph<T>::maxCapacity(unsigned int startIdx) {
 
     allNodes.at(startIdx).capacity = INT_MAX;
 
-    maxHeap<Node<T> *> pQueue;
+    MaxHeap<Node<T> *> pQueue;
     pQueue.push(
             allNodes.at(startIdx).capacity,
             &allNodes.at(startIdx)
@@ -188,35 +196,50 @@ void Graph<T>::maxCapacity(unsigned int startIdx) {
 }
 
 template<class T>
-Graph<T> Graph<T>::updateRGraph(Graph<T> G) {
+Graph<T> Graph<T>::updateRGraph(Graph<T> &G) {
+
+
     Graph<T> Gr; //residual graph
 
-    std::vector<Node<T> *> NODES = G.getAllNodesPtr();
-    for (unsigned int idx = 0; idx < size(); idx)
-    {
-        Gr.addNode(NODES.at(idx).value);
-        Gr.getAllNodesPtr().at(idx).id = NODES.at(idx).id;
-    }
+    std::vector<Node<T> *> GNodes = G.getAllNodesPtr();
 
-    for (unsigned int idx = 0; idx < size(); idx++)
+    for (unsigned int idx = 0; idx < G.size(); idx++)
     {
-        for (unsigned int edge = 0; edge < G.getAllNodesPtr()->at(idx).adj.size(); edge++)
+        Gr.addNode(GNodes.at(idx)->value);
+        Gr.getAllNodesPtr().at(idx)->id = GNodes.at(idx)->id;
+    }
+    unsigned int pos = 0;
+    for (unsigned int idx = 0; idx < G.size(); idx++)
+    {
+
+        for (unsigned int edge = 0; edge < GNodes.at(idx)->adj.size(); edge++)
         {
-            unsigned int flow = G.getAllNodesPtr().at(idx).adj.at(edge).flow;
-            unsigned int cap = G.getAllNodesPtr().at(idx).adj.at(edge).weight;
+
+            unsigned int flow = GNodes.at(idx)->adj.at(edge).flow;
+            unsigned int cap = GNodes.at(idx)->adj.at(edge).weight;
             if (flow < cap){
                 //residual
-                Gr.addEdge(
-                        G.getAllNodesPtr().at(idx).id,
-                        G.getAllNodesPtr().at(idx).adj.at(edge).next->id,
-                        cap - flow);
+                Gr.getAllNodesPtr().at(idx)->adj.at(
+                        (Gr.addEdge(
+                                idx,
+                                Gr.findNodeIndex( GNodes.at(idx)->adj.at(edge).next->id),
+                                cap - flow))
+                ).dir = std::pair<Edge<T> *, bool> (&GNodes.at(idx)->adj.at(edge), true);
+
+                //Gr.getAllNodesPtr().at(idx)->adj.at(pos).dir.first  = G.allNodes.at(idx).adj.at(edge).dir.first;
+                //Gr.getAllNodesPtr().at(idx)->adj.at(pos).dir.second = G.allNodes.at(idx).adj.at(edge).dir.second;
             }
             if (flow > 0){
                 //residual
-                addEdge(
-                        G.getAllNodesPtr().at(idx).adj.at(edge).next->id,
-                        G.getAllNodesPtr().at(idx).id,
-                        flow);
+                Gr.getAllNodesPtr().at(Gr.findNodeIndex( GNodes.at(idx)->adj.at(edge).next->id))->adj.at(
+                        (Gr.addEdge(
+                                Gr.findNodeIndex( GNodes.at(idx)->adj.at(edge).next->id),
+                                idx,
+                                flow))
+                ).dir = std::pair<Edge<T> *, bool> (&GNodes.at(idx)->adj.at(edge), false);
+
+                //Gr.getAllNodesPtr().at(idx)->adj.at(pos).dir.first  =  G.allNodes.at(idx).adj.at(edge).dir.first;
+                //Gr.getAllNodesPtr().at(idx)->adj.at(pos).dir.second = !G.allNodes.at(idx).adj.at(edge).dir.second;
             }
         }
     }
@@ -225,8 +248,9 @@ Graph<T> Graph<T>::updateRGraph(Graph<T> G) {
 }
 
 
+
 template<class T>
-unsigned int Graph<T>::fordFulkerson(unsigned int idxStart, unsigned int idxEnd) {
+unsigned int Graph<T>::edmondsKarp(unsigned int idxStart, unsigned int idxEnd) {
     for (unsigned int idx = 0; idx < size(); idx++)
     {
         for (unsigned int edge = 0; edge < allNodes.at(idx).adj.size(); edge++)
@@ -235,23 +259,42 @@ unsigned int Graph<T>::fordFulkerson(unsigned int idxStart, unsigned int idxEnd)
         }
     }
 
-    Graph<T> Gr = updateRGraph(this);
-
+    Graph<T> Gr = updateRGraph(*this);
     while (true){
-        //buscar um caminho de encremento
+        //buscar um caminho de incremento
         BFS(Gr, idxStart);
         if (Gr.getAllNodesPtr().at(idxEnd)->parent == nullptr) break; //n existem mais caminhos
 
 
+        //std::vector<Node<T> *> nodesGr = Gr.getAllNodesPtr();
+
+        std::vector<Edge<T> *> pathEdges;
+
+        unsigned int capPath = INT_MAX;
+        Node<T> * n = Gr.getAllNodesPtr().at(idxEnd);
+        while (n->parentEdge != nullptr)
+        {
+            pathEdges.push_back(n->parentEdge);
+            capPath = std::min(n->parentEdge->weight, capPath);
+            n = n->parentEdge->prev;
+        }
+
+
+        for (unsigned int idxEdge = 0; idxEdge < pathEdges.size(); idxEdge++)
+        {
+
+            /* atualizar flow */
+            if(pathEdges.at(idxEdge)->dir.second)
+                pathEdges.at(idxEdge)->dir.first->flow = pathEdges.at(idxEdge)->dir.first->flow + capPath;
+
+
+            else if (!pathEdges.at(idxEdge)->dir.second)
+                pathEdges.at(idxEdge)->dir.first->flow = pathEdges.at(idxEdge)->dir.first->flow - capPath;
+            }
+        Gr = updateRGraph(*this);
+
     }
-
-
-/*
-    while (f)
-    {
-
-    }
-*/
+    return 0;
     //Graph::Graph<T>
 }
 
@@ -260,6 +303,7 @@ void Graph<T>::setAllParentNull() {
     for (unsigned int idx = 0; idx < allNodes.size(); idx++)
     {
         allNodes.at(idx).parent = nullptr;
+        allNodes.at(idx).parentEdge = nullptr;
     }
 }
 /*

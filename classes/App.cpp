@@ -1,7 +1,7 @@
-#include "app.h"
+#include "App.h"
 
 
-int app::run() {
+int App::run() {
     int option;
     cout <<endl<< "Welcome to our travel agency!" << endl;
     while (true) {
@@ -55,4 +55,4 @@ int app::run() {
 
 
 
-#include "app.h"
+#include "App.h"

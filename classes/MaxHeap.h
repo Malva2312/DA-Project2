@@ -11,7 +11,7 @@
 #include <stdexcept>
 
 template <class T>
-struct maxHeap{
+struct MaxHeap{
 private:
     std::vector<
             std::pair<int, T>> A;

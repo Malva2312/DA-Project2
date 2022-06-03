@@ -9,7 +9,7 @@
 
 using namespace std;
 
-class app {
+class App {
 public:
     int run();
 
