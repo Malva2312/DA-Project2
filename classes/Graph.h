@@ -73,7 +73,7 @@ public:
     unsigned int edmondsKarp(unsigned int idxStart, unsigned int idxEnd); //
     Graph<T> updateRGraph(Graph<T> &G);
     void scenario2_1(int size, int start, int finish);
-    //void increasePath(Graph<T> &Gr, unsigned int idx); //BFS
+    Graph<T> minimumChanges(unsigned int idxStart, unsigned int idxEnd);
 };
 
 #endif //DA_PROJECT2_GRAPH_H

@@ -335,19 +335,16 @@ void Graph<T>::scenario2_1(int size, int start, int finish) {
 
     }
 }
-/*
+
 template<class T>
-void Graph<T>::increasePath(Graph<T> &Gr, unsigned int idx) {
-    Gr.setAllNotVisited();
+Graph<T> Graph<T>::minimumChanges(unsigned int idxStart, unsigned int idxEnd) {
 
-    std::queue<Node<T>*> nodesQueue;
-    std::vector<Node<T> *> node = Gr.getAllNodesPtr();
-    nodesQueue.push(node->at(idx));
+    int dist[allNodes.size()][allNodes.size()];
 
-    node.at(idx)->visited = true
+    for (unsigned int i = 0; i < allNodes.size(); i++){
+        dist[i][i] = 0;
+    }
 
-
-    return ;
+    return Graph<T>();
 }
-*/
 
