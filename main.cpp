@@ -7,12 +7,12 @@ int main() {
 
 
     string filename = "../Tests/in10.txt";
-    int dest = 5000;
     /*
     Graph<int> test = Graph<int>();
     FileReader fileReader(filename);
     fileReader.initGraph(&test);
     */
+
     Graph<int> test = Graph<int>();
     test.addNode(0);
     test.addNode(1);
@@ -35,9 +35,14 @@ int main() {
     test.addEdge(4 , 6 ,  9, 0);
     test.addEdge(5 , 6 ,  1, 0);
     test.addEdge(6 , 0 , 30, 0);
+
+    int max = test.edmondsKarp(5, 6);
+    cout << max  << endl;
+    cout << test.scenario2_1(max, 5, 6) << endl;
 /*
     App app;
     return app.run();
 */
+
     return 0;
 }

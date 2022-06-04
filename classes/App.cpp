@@ -1,5 +1,6 @@
 #include "App.h"
 
+using namespace std;
 
 int App::run() {
     int option;
@@ -52,7 +53,3 @@ int App::run() {
         }
     }
 }
-
-
-
-#include "App.h"
