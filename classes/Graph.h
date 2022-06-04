@@ -72,12 +72,13 @@ public:
     void maxCapacity(unsigned int startIdx);
     unsigned int edmondsKarp(unsigned int idxStart, unsigned int idxEnd); //
     Graph<T> updateRGraph(Graph<T> &G);
-    unsigned int scenario2_1(unsigned int size, unsigned int start, unsigned int finish);
-
+    unsigned int scenario2_1(unsigned int size, unsigned int start, unsigned int finish,
+                             std::vector<std::pair<unsigned int, std::stack<Edge<T> *>>> &solution = {});  //flow maximo permitido no caminho, stack das edges do caminho
 
     //Graph<T> minimumChanges(unsigned int idxStart, unsigned int idxEnd);
     //std::vector<Edge<T> *> smallWayMaxCap(Graph<T> &G, unsigned int startIdx, unsigned int endIdx, unsigned int maxDist, unsigned int dist = 0);
     void setAllNotUsed();
+
 
 };
 

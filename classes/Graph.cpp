@@ -326,7 +326,9 @@ void Graph<T>::setAllParentNull() {
 }
 
 template<class T>
-unsigned int Graph<T>::scenario2_1(unsigned int size, unsigned int start, unsigned int finish) {
+unsigned int Graph<T>::scenario2_1(unsigned int size, unsigned int start, unsigned int finish,
+                         std::vector<std::pair<unsigned int, std::stack<Edge<T> *>>> &solution) {
+
     unsigned int maxFlow = edmondsKarp(start,finish);
     if (size > maxFlow){
         std::cout << "cant transport so many people to destiny";
@@ -355,12 +357,11 @@ unsigned int Graph<T>::scenario2_1(unsigned int size, unsigned int start, unsign
 
 
         edge = allNodes.at(finish).parentEdge;
-        std::stack<T> path;
-        path.push(edge->next->value);
+        std::stack<Edge<T> *> path;
 
         while (edge != nullptr)
         {
-            path.push(edge->prev->value);
+            path.push(edge);
 
             edge->flow -= minFlow;
             if (edge->flow <= 0) edge->used = true;
@@ -368,15 +369,16 @@ unsigned int Graph<T>::scenario2_1(unsigned int size, unsigned int start, unsign
         }
 
         maxFlow -= minFlow;
-
-        std::cout << minFlow << " :  ";
+        solution.emplace_back(minFlow, path);
+        /*
+        std::cout << minFlow << " :\t";
         while (path.size() >1)
         {
-            std::cout << path.top() << " -> ";
+            std::cout << path.top() << "\t->\t";
             path.pop();
         }
         std::cout << path.top() << std::endl;
-
+        */
 
     }
 
