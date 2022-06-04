@@ -385,6 +385,28 @@ unsigned int Graph<T>::scenario2_1(unsigned int size, unsigned int start, unsign
     return maxFlow; //pessoas que ainda podia transportar
 }
 
+template<class T>
+unsigned int Graph<T>::scenario2_4(unsigned int size, unsigned int start, unsigned int finish,
+                                   std::vector<std::pair<unsigned int, std::stack<Edge<T> *>>> &solution) {
+
+    scenario2_1(size, start, finish, solution);
+
+    unsigned int maxTime = 0;
+
+    for (std::pair<unsigned int, std::stack<Edge<T> *>> path : solution){
+        unsigned int totalTime = 0;
+        while (!path.second.empty())
+        {
+            totalTime += path.second.top()->duration;
+            path.second.pop();
+        }
+
+        maxTime = std::max(totalTime, maxTime);
+    }
+
+    return maxTime;
+}
+
 
 /*
 template <class T>

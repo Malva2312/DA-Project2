@@ -45,8 +45,10 @@ int main() {
     cout << "max flow of the graph: "<< max  << endl;
 
     vector<pair<unsigned int, stack<Edge<int> *>>> allPaths;
-    cout <<  test.scenario2_1(max-1, start, end, allPaths) << " free space" << endl;
+    cout <<  test.scenario2_1(max, start, end, allPaths) << " free space" << endl;
     print_allPaths(allPaths);
+
+    cout << test.scenario2_4(max, start, end, allPaths) << endl;
 /*
     App app;
     return app.run();
