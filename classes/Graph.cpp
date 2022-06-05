@@ -340,8 +340,8 @@ unsigned int Graph<T>::scenario2_1(unsigned int size, unsigned int start, unsign
 
     unsigned int maxFlow = edmondsKarp(start,finish);
     if (size > maxFlow){
-        std::cout << "cant transport so many people to destiny";
-        return size - maxFlow; //pessoas que não consegue transportar
+        size=INT_MAX;
+        return size;
     };
     setAllNotUsed();
     setAllNotVisited();

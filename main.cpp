@@ -6,7 +6,9 @@
 void print_allPaths(vector<pair<unsigned int, stack<Edge<int> *>>> allPaths);
 
 int main() {
-
+    App app;
+    app.run();
+    return 0;
 
     string filename = "../Tests/in02.txt";
 

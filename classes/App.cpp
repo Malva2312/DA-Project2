@@ -33,8 +33,8 @@ int App::run() {
              << endl << endl << "1. See a path that maximizes the number of people in a group" << endl
              << "2. See a path that maximizes the number of people in a group while minimizing the number of stops" << endl << "3. See a path given the dimension of the group (allows to increase group size if there is still space left)" << endl
              << "4. See the maximum possible size of a group as well as the best path for them"<<endl
-             << "5. See when the group would reunite at the finish of the path (acyclic graph) "<< endl << "6. See the maximum waiting time that one group would have to wait for the other if they started at the same time and place" <<endl
-             << "7. Exit"<<endl;
+             << "5. See when the group would reunite at the finish of the path (acyclic graph) as well as the maximum waiting time and where it happens"<<endl
+             << "6. Exit"<<endl;
         cin >> option;
         if (cin.fail()) {
             throw invalid_argument("Please choose a valid number");
@@ -199,12 +199,46 @@ int App::run() {
                 }
                 continue;
             case 5:
+                while (true){
+                    cout<<endl<<"Enter the number of the dataset (1-10)"<<endl;
+                    cin>>option2;
+                    if (option2>10 || option2<1){
+                        cout<<"Please write a number between 1-10"<<endl;
+                        continue;
+                    }
+                    else{
+                        if (option2>=10){
+                            filename=filename+ to_string(option2)+".txt";
+                        }
+                        else{
+                            filename=filename+ "0"+to_string(option2)+".txt";
+                        }
+                        FileReader file(filename);
+                        Graph<int> test = Graph<int>();
+                        file.initGraph(&test);
+                        vector<pair<unsigned int, stack<Edge<int> *>>> allPaths={};
+                        int startPoint = 0;
+                        int endPoint = test.size()-1;
+                        int max = test.edmondsKarp(startPoint,endPoint);
+                        cout << "max flow of the graph: "<< max  << endl;
+                        cout <<  test.scenario2_1(max, startPoint, endPoint, allPaths) << " left" << endl;
+                        int maxCap=0;
+                        print_allPaths(allPaths,maxCap);
+                        cout <<endl;
+                        test.scenario2_4(max, startPoint, endPoint, allPaths);
+                        for (Node<int> * node : test.getAllNodesPtr())
+                        {
+                            if (node->visited){
+                                cout << node->value << " :  first " << node->waiting_first << " -- " << " last " << node->waiting_last << endl;
+                            }
+                        };
+
+                    }
+                    break;
+                }
 
                 continue;
-            case 6:
-
-                continue;
-            case 7:{
+            case 6:{
 
                 return 0;
             }
