@@ -41,14 +41,22 @@ int main() {
     test.addEdge(5 , 6 ,  1, 0);
     test.addEdge(6 , 0 , 30, 0);
 */
+    vector<pair<unsigned int, stack<Edge<int> *>>> allPaths;
+
     int max = test.edmondsKarp(start, end);
+    max = 2;
     cout << "max flow of the graph: "<< max  << endl;
 
-    vector<pair<unsigned int, stack<Edge<int> *>>> allPaths;
     cout <<  test.scenario2_1(max, start, end, allPaths) << " free space" << endl;
     print_allPaths(allPaths);
+    cout <<endl;
 
-    cout << test.scenario2_4(max, start, end, allPaths) << endl;
+    cout << "max flow of the graph: "<< max  << endl;
+    cout <<  test.scenario2_1(max, start, end, allPaths) << " free space" << endl;
+    print_allPaths(allPaths);
+    cout << endl;
+
+   //cout << test.scenario2_4(max, start, end) << endl;
 /*
     App app;
     return app.run();

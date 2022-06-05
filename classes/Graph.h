@@ -29,21 +29,20 @@ struct Node{
     Node<T> * parent;  //parent
     Edge<T> * parentEdge;
 
-    unsigned int capacity; // capacity: parent -> this
-
+    unsigned int capacity = 0; // capacity: parent -> this
+    unsigned int waiting = 0;
 };
 
 template <class T>
 struct Edge{
-    unsigned int  weight = 0;
-    int duration = 0;
-    Node<T> * next; //next
+    unsigned int weight   = 0;
+    unsigned int duration = 0;
 
+    Node<T> * next; //next
     Node<T> * prev; //previous
 
     bool used = false;
     unsigned int flow = 0;
-
     //used on edmond //chek if the flow is returning
     std::pair<Edge<T> *, bool> dir;
 };
@@ -74,13 +73,13 @@ public:
     Graph<T> updateRGraph(Graph<T> &G);
     unsigned int scenario2_1(unsigned int size, unsigned int start, unsigned int finish,
                              std::vector<std::pair<unsigned int, std::stack<Edge<T> *>>> &solution = {});  //flow maximo permitido no caminho, stack das edges do caminho
-    unsigned int scenario2_4(unsigned int size, unsigned int start, unsigned int finish,
-                             std::vector<std::pair<unsigned int, std::stack<Edge<T> *>>> &solution = {});
+    unsigned int scenario2_4(unsigned int size, unsigned int start, unsigned int finish);
     //Graph<T> minimumChanges(unsigned int idxStart, unsigned int idxEnd);
     //std::vector<Edge<T> *> smallWayMaxCap(Graph<T> &G, unsigned int startIdx, unsigned int endIdx, unsigned int maxDist, unsigned int dist = 0);
     void setAllNotUsed();
 
 
+    void setTimeTo0();
 };
 
 #endif //DA_PROJECT2_GRAPH_H

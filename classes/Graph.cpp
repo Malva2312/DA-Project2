@@ -48,6 +48,13 @@ void Graph<T>::setAllNotUsed(){
 }
 
 template<class T>
+void Graph<T>::setTimeTo0(){
+    for (Node<T> & node : allNodes){
+        node.waiting = 0;
+    }
+}
+
+template<class T>
 std::vector<Node<T>> Graph<T>::getAllNodes() const {
     return allNodes;
 }
@@ -260,6 +267,7 @@ unsigned int Graph<T>::edmondsKarp(unsigned int idxStart, unsigned int idxEnd) {
         for (unsigned int edge = 0; edge < allNodes.at(idx).adj.size(); edge++)
         {
             allNodes.at(idx).adj.at(edge).flow = 0;
+            allNodes.at(idx).capacity = 0;
         }
     }
 
@@ -370,15 +378,6 @@ unsigned int Graph<T>::scenario2_1(unsigned int size, unsigned int start, unsign
 
         maxFlow -= minFlow;
         solution.emplace_back(minFlow, path);
-        /*
-        std::cout << minFlow << " :\t";
-        while (path.size() >1)
-        {
-            std::cout << path.top() << "\t->\t";
-            path.pop();
-        }
-        std::cout << path.top() << std::endl;
-        */
 
     }
 
@@ -386,25 +385,28 @@ unsigned int Graph<T>::scenario2_1(unsigned int size, unsigned int start, unsign
 }
 
 template<class T>
-unsigned int Graph<T>::scenario2_4(unsigned int size, unsigned int start, unsigned int finish,
-                                   std::vector<std::pair<unsigned int, std::stack<Edge<T> *>>> &solution) {
+unsigned int Graph<T>::scenario2_4(unsigned int size, unsigned int start, unsigned int finish) {
 
+    std::vector<std::pair<unsigned int, std::stack<Edge<T> *>>> solution = {};
     scenario2_1(size, start, finish, solution);
 
-    unsigned int maxTime = 0;
+    setTimeTo0();
 
-    for (std::pair<unsigned int, std::stack<Edge<T> *>> path : solution){
-        unsigned int totalTime = 0;
-        while (!path.second.empty())
-        {
-            totalTime += path.second.top()->duration;
-            path.second.pop();
+    std::vector<std::vector<Edge<T> *>> allPaths;
+
+    for (unsigned int idx = 0; idx < solution.size(); idx++){
+        std::vector<Edge<T> *> path;
+
+        while (!solution.at(idx).second.empty()){
+            solution.at(idx).second.top()->used = true;
+            path.push_back( solution.at(idx).second.top() );
+            solution.at(idx).second.pop();
         }
-
-        maxTime = std::max(totalTime, maxTime);
+        allPaths.push_back(path);
     }
 
-    return maxTime;
+
+    return allNodes.at(finish).waiting;
 }
 
 
@@ -451,10 +453,6 @@ Graph<T> Graph<T>::minimumChanges(unsigned int idxStart, unsigned int idxEnd) {
             }
         }
     }
-
-
-
-
     return Graph<T>();
 }
 */
