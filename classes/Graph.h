@@ -30,7 +30,8 @@ struct Node{
     Edge<T> * parentEdge;
 
     unsigned int capacity = 0; // capacity: parent -> this
-    unsigned int waiting = 0;
+    unsigned int waiting_first = INT_MAX;
+    unsigned int waiting_last = 0;
 };
 
 template <class T>
