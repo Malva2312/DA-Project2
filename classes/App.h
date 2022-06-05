@@ -12,6 +12,7 @@
 class App {
 public:
     int run();
+    void print_allPaths(vector<pair<unsigned int, stack<Edge<int> *>>> allPaths, int & capacity);
 
 private:
 

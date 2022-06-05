@@ -2,6 +2,24 @@
 
 using namespace std;
 
+
+void App::print_allPaths(vector<pair<unsigned int, stack<Edge<int> *>>> allPaths, int & capacity){
+
+    for (auto & allPath : allPaths)
+    {
+        cout << allPath.first << " people can go in this path :\t";
+        capacity+=allPath.first;
+        while (allPath.second.size()>1){
+
+            cout << allPath.second.top()->prev->value << "\t->\t";
+            allPath.second.pop();
+        }
+        cout << allPath.second.top()->prev->value << "\t->\t";
+        cout << allPath.second.top()->next->value << endl;
+    }
+
+}
+
 int App::run() {
     int option;
     int option2;
@@ -115,7 +133,27 @@ int App::run() {
                         while (true){
                             cout<<endl<<"Enter the size of the group"<<endl;
                             cin>>size;
+                            vector<pair<unsigned int, stack<Edge<int> *>>> allPaths={};
+                            int left = test.scenario2_1(size,0,test.getAllNodes().size()-1,allPaths);
+                            int maxCap=left;
+                            cout<<endl<<"space left: "<<left<<endl<<endl;
+                            print_allPaths(allPaths,maxCap);
+                            cout<<endl<<"max flow of the graph: "<<maxCap<<endl;
+                            if (left>0){
+                                cout<<endl<<"Since there is still space left, would you like to increase the size of your group? (our program will update the paths accordingly)"<<endl<<"If so press 1"<<endl;
+                                cin>>option2;
+                                if (cin.fail()){
+                                    throw invalid_argument("Please input a valid number");
 
+                                }
+                                if (option2==1){
+                                    allPaths.clear();
+                                    continue;
+                                }
+                                else{
+                                    break;
+                                }
+                            }
                             break;
 
                         }
