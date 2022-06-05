@@ -410,22 +410,27 @@ unsigned int Graph<T>::scenario2_4(unsigned int size, unsigned int start, unsign
     }
 
     std::queue<Node<T> * > nodesToUpdate;
-    nodesToUpdate.push(&allNodes.at(finish));
-
+    nodesToUpdate.push(&allNodes.at(start));
+    allNodes.at(start).waiting_first = 0;
     Node<T> * node;
     while (!nodesToUpdate.empty())
     {
+        node = nodesToUpdate.front();
+        nodesToUpdate.pop();
 
-        for (Edge<T> * edge : node->adj)
+        for (Edge<T> & edge : node->adj)
         {
-            if (!edge->used) continue;
+            if (!edge.used) continue;
 
-            edge->next->waiting_first = std::min(node->waiting_last + edge->duration, edge->next->waiting_first);
+            edge.next->waiting_first = std::min(node->waiting_last + edge.duration, edge.next->waiting_first);
 
-            //if ( node )
+            if ( node->waiting_last + edge.duration > edge.next->waiting_last ){
+                edge.next->waiting_last = node->waiting_last + edge.duration;
+                nodesToUpdate.push(edge.next);
+            }
         }
     }
 
-    return allNodes.at(finish).waiting;
+    return allNodes.at(finish).waiting_last;
 }
 
