@@ -344,6 +344,8 @@ unsigned int Graph<T>::scenario2_1(unsigned int size, unsigned int start, unsign
         return size - maxFlow; //pessoas que não consegue transportar
     };
     setAllNotUsed();
+    setAllNotVisited();
+    setAllParentNull();
 
     while (size>0){
         BFS(*this, start);
@@ -389,44 +391,43 @@ unsigned int Graph<T>::scenario2_1(unsigned int size, unsigned int start, unsign
 }
 
 template<class T>
-unsigned int Graph<T>::scenario2_4(unsigned int size, unsigned int start, unsigned int finish) {
+unsigned int Graph<T>::scenario2_4(unsigned int size, unsigned int start, unsigned int finish,     std::vector<std::pair<unsigned int, std::stack<Edge<T> *>>> solution) {
 
-    std::vector<std::pair<unsigned int, std::stack<Edge<T> *>>> solution = {};
-    scenario2_1(size, start, finish, solution);
-
-    setTimeTo0();
-
-    std::vector<std::vector<Edge<T> *>> allPaths;
 
     for (unsigned int idx = 0; idx < solution.size(); idx++){
-        std::vector<Edge<T> *> path;
-
         while (!solution.at(idx).second.empty()){
             solution.at(idx).second.top()->used = true;
-            path.push_back( solution.at(idx).second.top() );
             solution.at(idx).second.pop();
         }
-        allPaths.push_back(path);
     }
+
+
+    setTimeTo0();
+    setAllNotVisited();
 
     std::queue<Node<T> * > nodesToUpdate;
     nodesToUpdate.push(&allNodes.at(start));
     allNodes.at(start).waiting_first = 0;
+    allNodes.at(start).visited = true;
+
     Node<T> * node;
     while (!nodesToUpdate.empty())
     {
         node = nodesToUpdate.front();
         nodesToUpdate.pop();
-
         for (Edge<T> & edge : node->adj)
         {
             if (!edge.used) continue;
 
+
             edge.next->waiting_first = std::min(node->waiting_last + edge.duration, edge.next->waiting_first);
 
             if ( node->waiting_last + edge.duration > edge.next->waiting_last ){
+
                 edge.next->waiting_last = node->waiting_last + edge.duration;
                 nodesToUpdate.push(edge.next);
+                edge.next->visited = true;
+
             }
         }
     }
