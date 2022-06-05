@@ -1,7 +1,3 @@
-//
-// Created by Utilizador on 12/05/2022.
-//
-
 #include "Graph.h"
 
 
@@ -27,18 +23,34 @@ unsigned int Graph<T>::addNode(T value) {
     allNodes.push_back(newNode);
     return newNode.id;
 }
-
+/*
 template<class T>
 bool Graph<T>::removeNode(unsigned int idNode) {
     int pos = findNodeIndex(idNode);
     allNodes.erase(allNodes.begin() + pos);
     return true;
 }
-
+*/
 template<class T>
 void Graph<T>::setAllNotVisited() {
+    for (Node<T> * node : getAllNodesPtr()){
+        node->visited = false;
+    }
+}
+
+template<class T>
+void Graph<T>::setAllNotUsed(){
     for (Node<T> node : allNodes){
-        node.visited = false;
+        for (unsigned int edge = 0; edge < node.adj.size(); edge++){
+            node.adj.at(edge).used = false;
+        }
+    }
+}
+
+template<class T>
+void Graph<T>::setTimeTo0(){
+    for (Node<T> & node : allNodes){
+        node.waiting = 0;
     }
 }
 
@@ -72,7 +84,7 @@ unsigned int Graph<T>::findNodeIndex(T value) {
 
 template<class T>
 unsigned int Graph<T>::findNodeIndex(unsigned int idNode) {
-    int high = allNodes.size() -1;
+    unsigned int high = allNodes.size() -1;
     unsigned int low = 0;
 
     while (low <= high) {
@@ -106,7 +118,7 @@ unsigned int Graph<T>::addEdge(unsigned int idxStart, unsigned int idxEnd, int w
 
     return pos;
 }
-
+/*
 template<class T>
 bool Graph<T>::eraseEdge(unsigned int start, unsigned int end, int weight) {
     for (int i = 0; i < allNodes.size(); i++)
@@ -118,6 +130,7 @@ bool Graph<T>::eraseEdge(unsigned int start, unsigned int end, int weight) {
     }
     return false;
 }
+ */
 
 template<class T>
 std::vector<Node<T> * > Graph<T>::BFS(Graph<T> &G, unsigned int idxNode) {
@@ -141,7 +154,7 @@ std::vector<Node<T> * > Graph<T>::BFS(Graph<T> &G, unsigned int idxNode) {
 
         for (unsigned int idxEdge = 0; idxEdge < node->adj.size(); idxEdge++){
 
-            if (node->adj.at(idxEdge).next->visited == false)
+            if (!(node->adj.at(idxEdge).used) && node->adj.at(idxEdge).next->visited == false)
             {
                 node->adj.at(idxEdge).next->visited = true;
                 node->adj.at(idxEdge).next->parent = node;
@@ -208,7 +221,6 @@ Graph<T> Graph<T>::updateRGraph(Graph<T> &G) {
         Gr.addNode(GNodes.at(idx)->value);
         Gr.getAllNodesPtr().at(idx)->id = GNodes.at(idx)->id;
     }
-    unsigned int pos = 0;
     for (unsigned int idx = 0; idx < G.size(); idx++)
     {
 
@@ -255,8 +267,11 @@ unsigned int Graph<T>::edmondsKarp(unsigned int idxStart, unsigned int idxEnd) {
         for (unsigned int edge = 0; edge < allNodes.at(idx).adj.size(); edge++)
         {
             allNodes.at(idx).adj.at(edge).flow = 0;
+            allNodes.at(idx).capacity = 0;
         }
     }
+
+    setAllNotUsed();
 
     Graph<T> Gr = updateRGraph(*this);
     while (true){
@@ -319,35 +334,125 @@ void Graph<T>::setAllParentNull() {
 }
 
 template<class T>
-void Graph<T>::scenario2_1(int size, int start, int finish) {
-    edmondsKarp(start,finish);
+unsigned int Graph<T>::scenario2_1(unsigned int size, unsigned int start, unsigned int finish,
+                         std::vector<std::pair<unsigned int, std::stack<Edge<T> *>>> &solution) {
+
+    unsigned int maxFlow = edmondsKarp(start,finish);
+    if (size > maxFlow){
+        std::cout << "cant transport so many people to destiny";
+        return size - maxFlow; //pessoas que não consegue transportar
+    };
+    setAllNotUsed();
+
     while (size>0){
-        //BFS()
-        int minFlow;
-        if (minFlow-size>=0){
-            //cout path and size
-            break;
+        BFS(*this, start);
+        Edge<T> * edge;
+
+
+        unsigned int minFlow = INT_MAX;
+        edge = allNodes.at(finish).parentEdge;
+
+
+        while (edge != nullptr)  //find minFlow;
+        {
+            minFlow = std::min(edge->flow, minFlow);
+            edge = edge->prev->parentEdge;
         }
-        size-=minFlow;
-        //cout path and size
-        //updte edges flow in path
-        //if new flow = 0, set as used
+
+
+        if (minFlow >= size) size = 0;
+        else size -= minFlow;
+
+
+        edge = allNodes.at(finish).parentEdge;
+        std::stack<Edge<T> *> path;
+
+        while (edge != nullptr)
+        {
+            path.push(edge);
+
+            edge->flow -= minFlow;
+            if (edge->flow <= 0) edge->used = true;
+            edge = edge->prev->parentEdge;
+        }
+
+        maxFlow -= minFlow;
+        solution.emplace_back(minFlow, path);
 
     }
+
+    return maxFlow; //pessoas que ainda podia transportar
 }
-/*
+
 template<class T>
-void Graph<T>::increasePath(Graph<T> &Gr, unsigned int idx) {
-    Gr.setAllNotVisited();
+unsigned int Graph<T>::scenario2_4(unsigned int size, unsigned int start, unsigned int finish) {
 
-    std::queue<Node<T>*> nodesQueue;
-    std::vector<Node<T> *> node = Gr.getAllNodesPtr();
-    nodesQueue.push(node->at(idx));
+    std::vector<std::pair<unsigned int, std::stack<Edge<T> *>>> solution = {};
+    scenario2_1(size, start, finish, solution);
 
-    node.at(idx)->visited = true
+    setTimeTo0();
+
+    std::vector<std::vector<Edge<T> *>> allPaths;
+
+    for (unsigned int idx = 0; idx < solution.size(); idx++){
+        std::vector<Edge<T> *> path;
+
+        while (!solution.at(idx).second.empty()){
+            solution.at(idx).second.top()->used = true;
+            path.push_back( solution.at(idx).second.top() );
+            solution.at(idx).second.pop();
+        }
+        allPaths.push_back(path);
+    }
 
 
-    return ;
+    return allNodes.at(finish).waiting;
+}
+
+
+/*
+template <class T>
+std::vector<Edge<T> *> Graph<T>::smallWayMaxCap(Graph<T> & G, unsigned int startIdx, unsigned int endIdx, unsigned int maxDist, unsigned int dist)
+{
+    if (startIdx == endIdx) return {};
+}
+
+template<class T>
+Graph<T> Graph<T>::minimumChanges(unsigned int idxStart, unsigned int idxEnd) {
+
+    unsigned int count = BFS(*this, idxStart).size();
+
+
+
+    std::vector<Edge<T>*>
+
+
+    unsigned int dist[allNodes.size()];
+    for (unsigned int idx = 0; idx < allNodes.size(); idx++)
+    {
+        dist[idx] = INT_MAX;
+    }
+
+    std::queue<unsigned int> indexes;
+    indexes.push(idxStart);
+
+    dist[idxStart] = 0;
+    allNodes.at(idxStart).visited = true;
+
+    while (!indexes.empty())
+    {
+        unsigned int idx = indexes.front();
+        indexes.pop();
+
+        for (unsigned int i = 0; i < allNodes.at(idx).adj.size();i++)
+        {
+            if (allNodes.at(idx)->adj.at(i).next->visited == false)
+            {
+                allNodes.at(idx)->adj.at(i).next->visited = true;
+                dist[findNodeIndex(allNodes.at(idx)->adj.at(i).next->id)] = dist[idx] +1;
+            }
+        }
+    }
+    return Graph<T>();
 }
 */
-
