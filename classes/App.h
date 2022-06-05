@@ -4,8 +4,9 @@
 
 #ifndef DA_PROJECT2_APP_H
 #define DA_PROJECT2_APP_H
-
+#include "FileReader.h"
 #include <iostream>
+#include <stack>
 
 using namespace std;
 
