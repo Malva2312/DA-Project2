@@ -1,6 +1,5 @@
 #include "Graph.h"
 
-
 template<class T>
 Graph<T>::Graph() {
     this->allNodes = {};
@@ -50,7 +49,8 @@ void Graph<T>::setAllNotUsed(){
 template<class T>
 void Graph<T>::setTimeTo0(){
     for (Node<T> & node : allNodes){
-        node.waiting = 0;
+        node.waiting_first = INT_MAX;
+        node.waiting_last = 0;
     }
 }
 
@@ -147,10 +147,11 @@ std::vector<Node<T> * > Graph<T>::BFS(Graph<T> &G, unsigned int idxNode) {
     Nodes.at(idxNode)->visited = true;
 
     Node<T> * node;
-    while (!nodesQueue.empty()){
+    while (!nodesQueue.empty()) {
 
         node = nodesQueue.front();
         nodesQueue.pop();
+
 
         for (unsigned int idxEdge = 0; idxEdge < node->adj.size(); idxEdge++){
 
@@ -360,7 +361,10 @@ unsigned int Graph<T>::scenario2_1(unsigned int size, unsigned int start, unsign
         }
 
 
-        if (minFlow >= size) size = 0;
+        if (minFlow >= size){
+            minFlow = size;
+            size = 0;
+        }
         else size -= minFlow;
 
 
@@ -405,54 +409,23 @@ unsigned int Graph<T>::scenario2_4(unsigned int size, unsigned int start, unsign
         allPaths.push_back(path);
     }
 
+    std::queue<Node<T> * > nodesToUpdate;
+    nodesToUpdate.push(&allNodes.at(finish));
+
+    Node<T> * node;
+    while (!nodesToUpdate.empty())
+    {
+
+        for (Edge<T> * edge : node->adj)
+        {
+            if (!edge->used) continue;
+
+            edge->next->waiting_first = std::min(node->waiting_last + edge->duration, edge->next->waiting_first);
+
+            //if ( node )
+        }
+    }
 
     return allNodes.at(finish).waiting;
 }
 
-
-/*
-template <class T>
-std::vector<Edge<T> *> Graph<T>::smallWayMaxCap(Graph<T> & G, unsigned int startIdx, unsigned int endIdx, unsigned int maxDist, unsigned int dist)
-{
-    if (startIdx == endIdx) return {};
-}
-
-template<class T>
-Graph<T> Graph<T>::minimumChanges(unsigned int idxStart, unsigned int idxEnd) {
-
-    unsigned int count = BFS(*this, idxStart).size();
-
-
-
-    std::vector<Edge<T>*>
-
-
-    unsigned int dist[allNodes.size()];
-    for (unsigned int idx = 0; idx < allNodes.size(); idx++)
-    {
-        dist[idx] = INT_MAX;
-    }
-
-    std::queue<unsigned int> indexes;
-    indexes.push(idxStart);
-
-    dist[idxStart] = 0;
-    allNodes.at(idxStart).visited = true;
-
-    while (!indexes.empty())
-    {
-        unsigned int idx = indexes.front();
-        indexes.pop();
-
-        for (unsigned int i = 0; i < allNodes.at(idx).adj.size();i++)
-        {
-            if (allNodes.at(idx)->adj.at(i).next->visited == false)
-            {
-                allNodes.at(idx)->adj.at(i).next->visited = true;
-                dist[findNodeIndex(allNodes.at(idx)->adj.at(i).next->id)] = dist[idx] +1;
-            }
-        }
-    }
-    return Graph<T>();
-}
-*/
