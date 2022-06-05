@@ -226,12 +226,19 @@ int App::run() {
                         print_allPaths(allPaths,maxCap);
                         cout <<endl;
                         test.scenario2_4(max, startPoint, endPoint, allPaths);
+                        int maxWait;
+                        int location;
                         for (Node<int> * node : test.getAllNodesPtr())
                         {
                             if (node->visited){
+                                if (node->waiting_last-node->waiting_first>maxWait){
+                                    maxWait=node->waiting_last-node->waiting_first;
+                                    location=node->value;
+                                }
                                 cout << node->value << " :  first " << node->waiting_first << " -- " << " last " << node->waiting_last << endl;
                             }
                         };
+                        cout<<endl<<"The maximum wait time is "<<maxWait<<" on location "<<location<<endl;
 
                     }
                     break;
