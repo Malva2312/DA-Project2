@@ -31,10 +31,10 @@ int App::run() {
         string filename="../Tests/in";
         cout <<endl<< "Please choose what you would like to do"
              << endl << endl << "1. See a path that maximizes the number of people in a group" << endl
-             << "2. See a path that maximizes the number of people in a group while minimizing the number of stops" << endl << "3. See a path given the dimension of the group" << endl
-             << "4. See path from option 3 but improved to allow for a certain number of people to be added to the group" << endl << "5. See the maximum possible size of a group as well as the best path for them"<<endl
-             << "6. See when the group would reunite at the finish of the path (acyclic graph) "<< endl << "7. See the maximum waiting time that one group would have to wait for the other if they started at the same time and place" <<endl
-             << "8. Exit"<<endl;
+             << "2. See a path that maximizes the number of people in a group while minimizing the number of stops" << endl << "3. See a path given the dimension of the group (allows to increase group size if there is still space left)" << endl
+             << "4. See the maximum possible size of a group as well as the best path for them"<<endl
+             << "5. See when the group would reunite at the finish of the path (acyclic graph) "<< endl << "6. See the maximum waiting time that one group would have to wait for the other if they started at the same time and place" <<endl
+             << "7. Exit"<<endl;
         cin >> option;
         if (cin.fail()) {
             throw invalid_argument("Please choose a valid number");
@@ -130,11 +130,16 @@ int App::run() {
                         FileReader file(filename);
                         Graph<int> test = Graph<int>();
                         file.initGraph(&test);
+
                         while (true){
                             cout<<endl<<"Enter the size of the group"<<endl;
                             cin>>size;
                             vector<pair<unsigned int, stack<Edge<int> *>>> allPaths={};
                             int left = test.scenario2_1(size,0,test.getAllNodes().size()-1,allPaths);
+                            if (left==INT_MAX){
+                                cout<<endl<<"There is no path for that many people"<<endl;
+                                continue;
+                            }
                             int maxCap=left;
                             cout<<endl<<"space left: "<<left<<endl<<endl;
                             print_allPaths(allPaths,maxCap);
@@ -163,7 +168,35 @@ int App::run() {
                 continue;
 
             case 4:
+                while (true){
+                    cout<<endl<<"Enter the number of the dataset (1-10)"<<endl;
+                    cin>>option2;
+                    if (option2>10 || option2<1){
+                        cout<<"Please write a number between 1-10"<<endl;
+                        continue;
+                    }
+                    else{
+                        if (option2>=10){
+                            filename=filename+ to_string(option2)+".txt";
+                        }
+                        else{
+                            filename=filename+ "0"+to_string(option2)+".txt";
+                        }
+                        FileReader file(filename);
+                        Graph<int> test = Graph<int>();
+                        file.initGraph(&test);
+                        vector<pair<unsigned int, stack<Edge<int> *>>> allPaths={};
+                        int startPoint = 0;
+                        int endPoint = test.size()-1;
+                        int max = test.edmondsKarp(startPoint,endPoint);
+                        test.scenario2_1(max,startPoint,endPoint,allPaths);
+                        int maxCap=0;
+                        print_allPaths(allPaths,maxCap);
+                        cout<<endl<<"max flow of the graph: "<<maxCap<<endl;
 
+                    }
+                    break;
+                }
                 continue;
             case 5:
 
@@ -173,12 +206,9 @@ int App::run() {
                 continue;
             case 7:{
 
-                continue;
-            }
-            case 8:{
-
                 return 0;
             }
+
             default:
                 continue;
         }
