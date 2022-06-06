@@ -435,3 +435,76 @@ unsigned int Graph<T>::scenario2_4(unsigned int size, unsigned int start, unsign
     return allNodes.at(finish).waiting_last;
 }
 
+template<class T>
+void Graph<T>::scenario1_2(unsigned int startIdx,unsigned int finishIdx,Graph<T> &G1,Graph<T> &G2) {
+    int size1=1;
+    int size2=0;
+    int cap1=1;
+    int cap2=0;
+    std::cout<<std::endl<<std::endl<<"//"<<std::endl<<std::endl;
+    while(cap1!=cap2 || size1!=size2){
+        G1.maxCapacity(startIdx);
+        G2.BFS(G2,startIdx);
+        Edge<int> * edge;
+        edge= G2.getAllNodes().at(finishIdx).parentEdge;
+        Edge<int> * bad_edge;
+        std::stack<int> path2;
+        int minCap=INT_MAX;
+        int counter1=1;
+        while (edge != nullptr)
+        {
+            if (minCap>edge->weight){
+                minCap=edge->weight;
+                bad_edge=edge;
+            }
+            counter1+=1;
+            path2.push(edge->next->value);
+            edge = edge->prev->parentEdge;
+        }
+        size1=counter1;
+        bad_edge->used=true;
+        std::cout<<"start: "<<startIdx+1<<"-->";
+        while(!path2.empty()){
+            std::cout<<path2.top();
+            path2.pop();
+            if (!path2.empty()){
+                std::cout<<"-->";
+            }
+            else{
+                std::cout<<" finish"<<" (path with less stops)"<<std::endl;
+            }
+        }
+        std::cout<<"Capacity: "<<minCap<<std::endl;
+        cap1=minCap;
+
+        Node<int>  * node = &G1.getAllNodes().at(finishIdx);
+        int maxCap = node->capacity;
+        std::stack<int> path;
+        int counter2=0;
+        while (node != nullptr)
+        {
+            counter2+=1;
+            path.push(node->value);
+            node = node->parent;
+        }
+        size2=counter2;
+        std::cout<<"start: "<<path.top()<<"-->";
+        path.pop();
+        while(!path.empty()){
+            std::cout<<path.top();
+            path.pop();
+            if (!path.empty()){
+                std::cout<<"-->";
+            }
+            else{
+                std::cout<<" finish"<<" (path with the most capacity)";
+            }
+        }
+        std::cout<<std::endl<<"Capacity: "<<maxCap<<std::endl;
+        cap2=maxCap;
+        std::cout<<std::endl<<std::endl<<"//"<<std::endl<<std::endl;
+    }
+
+
+}
+

@@ -96,7 +96,7 @@ int App::run() {
                                             cout<<" finish";
                                         }
                                     }
-                                    cout<<endl<<"Between those two nodes this path has the maximum capacity of all the paths with a capacity of "<<maxCap<<" people"<<endl;
+                                    cout<<endl<<"Between these nodes this path has the maximum capacity of all the paths with a capacity of "<<maxCap<<" people"<<endl;
 
                                     break;
                                 }
@@ -108,7 +108,52 @@ int App::run() {
                 }
                 continue;
             case 2:
+                while (true){
+                    cout<<endl<<"Enter the number of the dataset (1-10)"<<endl;
+                    cin>>option2;
+                    if (option2>10 || option2<1){
+                        cout<<"Please write a number between 1-10"<<endl;
+                        continue;
+                    }
+                    else{
+                        if (option2>=10){
+                            filename=filename+ to_string(option2)+".txt";
+                        }
+                        else{
+                            filename=filename+ "0"+to_string(option2)+".txt";
+                        }
+                        FileReader file(filename);
+                        Graph<int> test = Graph<int>();
+                        Graph<int> test2 = Graph<int>();
+                        file.initGraph(&test);
+                        file.initGraph(&test2);
+                        while (true){
+                            cout<<endl<<"Enter the starting node"<<endl;
+                            cin>>start;
+                            if (start>test.getAllNodes().size() || start<1){
+                                cout<<"Please write a number between 1-"<<test.getAllNodes().size()<<endl;
+                                continue;
+                            }
+                            else{
+                                int start2=test.findNodeIndex(start);
+                                cout<<endl<<"Enter the last node"<<endl;
+                                cin>>finish;
+                                if (finish>test.getAllNodes().size() || finish<1){
+                                    cout<<"Please write a number between 1-"<<test.getAllNodes().size()<<endl;
+                                    continue;
+                                }
+                                else{
+                                    int finish2=test.findNodeIndex(finish);
+                                    test.scenario1_2(start2,finish2,test,test2);
 
+                                    break;
+                                }
+
+                            }
+                        }
+                        break;
+                    }
+                }
 
                 continue;
 
@@ -216,32 +261,47 @@ int App::run() {
                         FileReader file(filename);
                         Graph<int> test = Graph<int>();
                         file.initGraph(&test);
-                        vector<pair<unsigned int, stack<Edge<int> *>>> allPaths={};
-                        int startPoint = 0;
-                        int endPoint = test.size()-1;
-                        int max = test.edmondsKarp(startPoint,endPoint);
-                        cout << "max flow of the graph: "<< max  << endl;
-                        cout <<  test.scenario2_1(max, startPoint, endPoint, allPaths) << " left" << endl;
-                        int maxCap=0;
-                        print_allPaths(allPaths,maxCap);
-                        cout <<endl;
-                        test.scenario2_4(max, startPoint, endPoint, allPaths);
-                        int maxWait;
-                        int location;
-                        for (Node<int> * node : test.getAllNodesPtr())
-                        {
-                            if (node->visited){
-                                if (node->waiting_last-node->waiting_first>maxWait){
-                                    maxWait=node->waiting_last-node->waiting_first;
-                                    location=node->value;
-                                }
-                                cout << node->value << " :  first " << node->waiting_first << " -- " << " last " << node->waiting_last << endl;
+                        while (true){
+                            cout<<endl<<"Enter the size of the group"<<endl;
+                            cin>>size;
+                            cout<<endl<<"Enter the starting node"<<endl;
+                            cin>>start;
+                            cout<<endl<<"Enter the last node"<<endl;
+                            cin>>finish;
+                            if (finish>test.getAllNodes().size()-1){
+                                cout<<endl<<"Finish node doesnt exist"<<endl;
+                                continue;
                             }
-                        };
-                        cout<<endl<<"The maximum wait time is "<<maxWait<<" on location "<<location<<endl;
+                            else{
+                                vector<pair<unsigned int, stack<Edge<int> *>>> allPaths={};
+                                cout <<  test.scenario2_1(size, 0, test.getAllNodes().size()-1, allPaths) << " left" << endl;
+                                int maxCap=0;
+                                print_allPaths(allPaths,maxCap);
+                                cout <<endl;
+                                int start2=test.findNodeIndex(start);
+                                int finish2=test.findNodeIndex(finish);
+                                test.scenario2_4(size, start2, finish2, allPaths);
+                                int maxWait;
+                                int location;
+                                for (Node<int> * node : test.getAllNodesPtr())
+                                {
+                                    if (node->visited){
+                                        if (node->waiting_last-node->waiting_first>maxWait){
+                                            maxWait=node->waiting_last-node->waiting_first;
+                                            location=node->value;
+                                        }
+                                        cout << node->value << " :  first " << node->waiting_first << " -- " << " last " << node->waiting_last << endl;
+                                    }
+                                };
+                                cout<<endl<<"The maximum wait time is "<<maxWait<<" on location "<<location<<endl;
+                                break;
+                            }
 
-                    }
+                        }
+
                     break;
+                    }
+
                 }
 
                 continue;
