@@ -268,7 +268,7 @@ int App::run() {
                             cin>>start;
                             cout<<endl<<"Enter the last node"<<endl;
                             cin>>finish;
-                            if (finish>test.getAllNodes().size()-1){
+                            if (finish>test.getAllNodes().size()){
                                 cout<<endl<<"Finish node doesnt exist"<<endl;
                                 continue;
                             }
